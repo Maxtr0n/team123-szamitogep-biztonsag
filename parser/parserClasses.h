@@ -48,10 +48,13 @@ public:
         ifstream.read(reinterpret_cast<char *>(&height), 8);
         getline(ifstream,caption, '\n');
         size_t tags_length = headerSize - (36 + caption.size());
-        string buffer;
-        ifstream.read(reinterpret_cast<char *>(&buffer), tags_length);
-
-
+        uint64_t buffer_size = 0;
+        while(buffer_size + 1<tags_length){
+            string temp;
+            getline(ifstream, temp, '\0');
+            buffer_size += temp.size() + 1;
+            tags.push_back(temp);
+        }
     }
 };
 
@@ -62,8 +65,12 @@ public:
     exactly content_size number of bytes.*/
     vector<char> pixels{};
 
-    void read(ifstream &ifstream) {
-
+    void read(ifstream &ifstream, uint64_t contentSize) {
+        for(int i=0; i<contentSize; i++){
+            char temp;
+            ifstream.read(&temp,1);
+            pixels.push_back(temp);
+        }
     }
 };
 
@@ -75,7 +82,7 @@ public:
 
     void read(ifstream &ifstream) {
         header.read(ifstream);
-        content.read(ifstream);
+        content.read(ifstream, header.contentSize);
     }
 };
 
@@ -122,11 +129,11 @@ class CaffCredits {
 		D - day (1 byte)
 		h - hour (1 byte)
 		m - minute (1 byte) */
-    char year[2]{};
-    char month{};
-    char day{};
-    char hour{};
-    char minute{};
+    uint64_t year{};
+    uint64_t month{};
+    uint64_t day{};
+    uint64_t hour{};
+    uint64_t minute{};
 
 	/** Length of creator: 8-byte-long integer, the length of the field
 	specifying the creator. */
@@ -136,14 +143,14 @@ class CaffCredits {
 	string creator{};
 public:
     void read(ifstream &is) {
-        is.read(year, 2);
-        is.read(&month, 1);
-        is.read(&day, 1);
-        is.read(&hour, 1);
-        is.read(&minute, 1);
+        is.read(reinterpret_cast<char *>(&year), 2);
+        is.read(reinterpret_cast<char *>(&month), 1);
+        is.read(reinterpret_cast<char *>(&day), 1);
+        is.read(reinterpret_cast<char *>(&hour), 1);
+        is.read(reinterpret_cast<char *>(&minute), 1);
 
         is.read(reinterpret_cast<char *>(&lenghtOfCreator), 8);
-        is.read(reinterpret_cast<char *>(&creator), lenghtOfCreator);
+        is.read(reinterpret_cast<char *>(&creator[0]), lenghtOfCreator);//TODO creator valamiért üres lesz, ha [0]-val címezzük és nem elérhető memóriacím ha stringként
     }
 };
 
