@@ -115,6 +115,20 @@ public:
     Ciff ciff{};
 };
 
+class Caff {
+public:
+    CaffBlock headerInfo{};
+    CaffBlock creditsInfo{};
+    CaffBlock animationInfo{};
+
+    CaffHeader header{};
+    CaffCredits credits{};
+
+    vector<CaffAnimation> animation{};
+
+
+};
+
 
 
 #endif //PARSER_PARSERCLASSES_H
