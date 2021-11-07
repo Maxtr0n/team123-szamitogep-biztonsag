@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -36,8 +38,21 @@ public:
 	/** Tags: Variable number of variable-length ASCII encoded strings, each
 	separated by \0 characters. The strings themselves must not be multiline.
 	There must be a \0 character after the last tag as well.*/
-    string tags{};
+    vector<string> tags{};
 
+    void read(ifstream &ifstream) {
+        ifstream.read(magic, 4);
+        ifstream.read(reinterpret_cast<char *>(&headerSize), 8);
+        ifstream.read(reinterpret_cast<char *>(&contentSize), 8);
+        ifstream.read(reinterpret_cast<char *>(&width), 8);
+        ifstream.read(reinterpret_cast<char *>(&height), 8);
+        getline(ifstream,caption, '\n');
+        size_t tags_length = headerSize - (36 + caption.size());
+        string buffer;
+        ifstream.read(reinterpret_cast<char *>(&buffer), tags_length);
+
+
+    }
 };
 
 class CiffContent {
@@ -46,6 +61,10 @@ public:
     each component taking up 1 byte. This part of the CIFF file must contain
     exactly content_size number of bytes.*/
     vector<char> pixels{};
+
+    void read(ifstream &ifstream) {
+
+    }
 };
 
 
@@ -53,9 +72,15 @@ class Ciff {
 public:
     CiffHeader header;
     CiffContent content;
+
+    void read(ifstream &ifstream) {
+        header.read(ifstream);
+        content.read(ifstream);
+    }
 };
 
 class CaffBlock {
+public:
     /** ID: 1-byte number which identifies the type of the block:
             0x1 - header
             0x2 - credits
@@ -66,7 +91,7 @@ class CaffBlock {
     uint64_t length{};
 
     /** Data: This section is length bytes long and contain the data of the block.*/
-    vector<char> data{};
+
 };
 
 class CaffHeader {
@@ -81,6 +106,12 @@ public:
     /** Number of animated CIFFs: 8-byte long integer, gives the number of CIFF
             animation blocks in the CAFF file.*/
     uint64_t numOfCiffs{};
+
+    void read(ifstream &is) {
+        is.read(reinterpret_cast<char *>(&magic), 4);
+        is.read(reinterpret_cast<char *>(&headerSize), 8);
+        is.read(reinterpret_cast<char *>(&numOfCiffs), 8);
+    }
 };
 
 class CaffCredits {
@@ -91,11 +122,11 @@ class CaffCredits {
 		D - day (1 byte)
 		h - hour (1 byte)
 		m - minute (1 byte) */
-    char year[2];
-    char month;
-    char day;
-    char hour;
-    char minute;
+    char year[2]{};
+    char month{};
+    char day{};
+    char hour{};
+    char minute{};
 
 	/** Length of creator: 8-byte-long integer, the length of the field
 	specifying the creator. */
@@ -103,6 +134,17 @@ class CaffCredits {
 
 	/** Creator: Variable-length ASCII string, the creator of the CAFF file.*/
 	string creator{};
+public:
+    void read(ifstream &is) {
+        is.read(year, 2);
+        is.read(&month, 1);
+        is.read(&day, 1);
+        is.read(&hour, 1);
+        is.read(&minute, 1);
+
+        is.read(reinterpret_cast<char *>(&lenghtOfCreator), 8);
+        is.read(reinterpret_cast<char *>(&creator), lenghtOfCreator);
+    }
 };
 
 class CaffAnimation {
@@ -113,6 +155,11 @@ public:
 
     /* CIFF: the image to be displayed in CIFF format.*/
     Ciff ciff{};
+
+    void read(ifstream &is){
+        is.read(reinterpret_cast<char *>(&duration), 8);
+        ciff.read(is);
+    }
 };
 
 class Caff {
