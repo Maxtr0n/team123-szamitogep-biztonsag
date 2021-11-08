@@ -11,7 +11,7 @@ int main() {
     Caff c;
 
     ifstream file;
-    file.open("../examples/1.caff", ios::in | ios::binary);
+    file.open("../examples/2.caff", ios::in | ios::binary);
     if (!file.is_open()) {
         exit(1);
     }

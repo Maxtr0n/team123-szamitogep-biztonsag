@@ -150,7 +150,9 @@ public:
         is.read(reinterpret_cast<char *>(&minute), 1);
 
         is.read(reinterpret_cast<char *>(&lenghtOfCreator), 8);
-        is.read(reinterpret_cast<char *>(&creator[0]), lenghtOfCreator);//TODO creator valamiért üres lesz, ha [0]-val címezzük és nem elérhető memóriacím ha stringként
+        vector<char> buffer(lenghtOfCreator);
+        is.read(&buffer.front(),lenghtOfCreator);
+        creator = std::string(buffer.begin(), buffer.end());
     }
 };
 
@@ -171,10 +173,6 @@ public:
 
 class Caff {
 public:
-    CaffBlock headerInfo{};
-    CaffBlock creditsInfo{};
-    CaffBlock animationInfo{};
-
     CaffHeader header{};
     CaffCredits credits{};
 
