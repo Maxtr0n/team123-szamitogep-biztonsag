@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "parserClasses.h"
+#include "bitmap.h"
 using namespace std;
 
 int main(int argc, char* argv[]) {
@@ -71,7 +72,7 @@ int main(int argc, char* argv[]) {
 
     /** ---------------- OPEN & READ END ---------------- */
 
-    
+    genBitmap(caff);
 
     return 0;
 }
