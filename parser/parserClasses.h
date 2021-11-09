@@ -150,9 +150,13 @@ public:
         is.read(reinterpret_cast<char *>(&minute), 1);
 
         is.read(reinterpret_cast<char *>(&lenghtOfCreator), 8);
-        vector<char> buffer(lenghtOfCreator);
-        is.read(&buffer.front(),lenghtOfCreator);
-        creator = std::string(buffer.begin(), buffer.end());
+        if (lenghtOfCreator > 0) {
+            vector<char> buffer(lenghtOfCreator);
+            is.read(&buffer.front(), lenghtOfCreator);
+            creator = std::string(buffer.begin(), buffer.end());
+        } else {
+            creator = "";
+        }
     }
 };
 
