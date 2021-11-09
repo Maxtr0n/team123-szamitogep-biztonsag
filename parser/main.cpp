@@ -73,13 +73,14 @@ int main(int argc, char* argv[]) {
 
     /** ---------------- OPEN & READ END ---------------- */
 
+    /** ---------------- GENERATE GIF ---------------- */
+
     int width = caff.animation.at(0).ciff.header.width;
     int height = caff.animation.at(0).ciff.header.height;
 
-    auto fileName = "bwgif.gif";
-    //int delay = 100;
+    auto fileName = fileOut + string(".gif");
     GifWriter g;
-    GifBegin(&g, fileName, width, height, 100);
+    GifBegin(&g, fileName.c_str(), width, height, 1);
     for (auto &f : caff.animation) {
         vector<uint8_t> pixelToGif{};
         size_t n = 0;
@@ -94,9 +95,9 @@ int main(int argc, char* argv[]) {
         }
         GifWriteFrame(&g, pixelToGif.data(), width, height, f.duration/10);
     }
-    /*GifWriteFrame(&g, black.data(), width, height, delay);
-    GifWriteFrame(&g, white.data(), width, height, delay);*/
     GifEnd(&g);
+
+    /** ---------------- GENERATE GIF END ---------------- */
 
     return 0;
 }
