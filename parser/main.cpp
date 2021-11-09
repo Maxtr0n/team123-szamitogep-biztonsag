@@ -2,7 +2,7 @@
 #include <fstream>
 #include "parserClasses.h"
 #include "gif.h"
-#include "json.h"
+#include "json.hpp"
 
 using namespace std;
 
