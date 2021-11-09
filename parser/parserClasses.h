@@ -8,6 +8,27 @@
 
 using namespace std;
 
+bool magicMatch(char a[], char b[]){
+    for(int i =0; i<4; i++){
+        if(a[i] != b[i])
+            return false;
+    }
+    return true;
+}
+
+struct CaffFormatErrorException : public std::exception
+{
+    string msg;
+
+    CaffFormatErrorException(const char* _msg){
+        msg = _msg;
+    }
+    string message () const throw ()
+    {
+        return msg;
+    }
+};
+
 class CiffHeader {
 public:
     /**	Magic: 4 ASCII character spelling 'CIFF'*/
@@ -42,6 +63,9 @@ public:
 
     void read(ifstream &ifstream) {
         ifstream.read(magic, 4);
+        char check[] = {'C','I','F','F'};
+        if(!magicMatch(magic,check))
+            throw CaffFormatErrorException("Invalid CIFF file format.");
         ifstream.read(reinterpret_cast<char *>(&headerSize), 8);
         ifstream.read(reinterpret_cast<char *>(&contentSize), 8);
         ifstream.read(reinterpret_cast<char *>(&width), 8);
@@ -50,11 +74,28 @@ public:
         size_t tags_length = headerSize - (36 + caption.size());
         uint64_t buffer_size = 0;
         while(buffer_size + 1<tags_length){
-            string temp;
-            getline(ifstream, temp, '\0');
-            buffer_size += temp.size() + 1;
-            tags.push_back(temp);
+            try{
+                string temp;
+                getline(ifstream, temp, '\0');
+                buffer_size += temp.size() + 1;
+                tags.push_back(temp);
+            }
+            catch(exception e) {
+                throw CaffFormatErrorException("Invalid CIFF tags format.");
+            }
         }
+
+        for(auto a:tags){
+            if(a.find('\n') != std::string::npos)
+                throw CaffFormatErrorException("Multiline tags in CIFF.");
+        }
+        if(tags.size()>headerSize)
+            throw CaffFormatErrorException("Invalid CIFF tags format.");
+
+        if(headerSize != 4+8+8+8+8+caption.length()+tags_length)
+            throw CaffFormatErrorException("Invalid header_size in CIFF header.");
+        if(contentSize != width*height*3)
+            throw CaffFormatErrorException("Invalid content_size in CIFF header.");
     }
 };
 
@@ -83,6 +124,10 @@ public:
     void read(ifstream &ifstream) {
         header.read(ifstream);
         content.read(ifstream, header.contentSize);
+        if(content.pixels.size()!=header.contentSize)
+            throw CaffFormatErrorException("Invalid content format in CIFF file.");
+        if((header.width == 0 || header.height == 0) && content.pixels.size()!=0 )
+            throw CaffFormatErrorException("Invalid pixel data in CIFF file.");
     }
 };
 
@@ -96,8 +141,6 @@ public:
 
     /** Length: 8-byte-long integer giving the length of the block. */
     uint64_t length{};
-
-    /** Data: This section is length bytes long and contain the data of the block.*/
 
 };
 
@@ -116,7 +159,12 @@ public:
 
     void read(ifstream &is) {
         is.read(reinterpret_cast<char *>(&magic), 4);
+        char check[] = {'C','A','F','F'};
+        if(!magicMatch(magic,check))
+            throw CaffFormatErrorException("Invalid CAFF file format.");
         is.read(reinterpret_cast<char *>(&headerSize), 8);
+        if(headerSize!= 4+8+8)
+            throw CaffFormatErrorException("Invalid CAFF header size.");
         is.read(reinterpret_cast<char *>(&numOfCiffs), 8);
     }
 };

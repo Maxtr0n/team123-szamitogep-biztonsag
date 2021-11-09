@@ -19,8 +19,6 @@ int main(int argc, char* argv[]) {
         exit(-1);
     }
 
-    Caff caff;
-
     int argIn;
     int argOut;
     if (strcmp(argv[1], "--if") != 0 &&
@@ -45,33 +43,51 @@ int main(int argc, char* argv[]) {
     /** ---------------- ARGUMENT CHECK END ---------------- */
 
     /** ---------------- OPEN & READ ---------------- */
-    ifstream file;
-    file.open(argv[argIn], ios::in | ios::binary);
-    if (!file.is_open()) {
-        cerr << "Couldn't open given file." << endl;
-        exit(3);
-    }
-    while (!file.eof()) {
-        CaffBlock read;
-        file.read((char *)(&read.id), 1);
-        file.read(reinterpret_cast<char *>(&read.length), 8);
-
-        switch (read.id) {
-            case '\x01':
-                caff.header.read(file);
-                break;
-            case '\x02':
-                caff.credits.read(file);
-                break;
-            case '\x03':
-                caff.animation.emplace_back();
-                caff.animation.at(caff.animation.size() - 1).read(file);
-                break;
-            default:
-                break;
+    Caff caff;
+    try {
+        ifstream file;
+        file.open(argv[argIn], ios::in | ios::binary);
+        if (!file.is_open()) {
+            cerr << "Couldn't open given file." << endl;
+            exit(3);
         }
-    }
 
+        while (!file.eof()) {
+            CaffBlock read;
+            file.read((char *) (&read.id), 1);
+            file.read(reinterpret_cast<char *>(&read.length), 8);
+
+            switch (read.id) {
+                case '\x01':
+                    caff.header.read(file);
+                    if (caff.header.headerSize != read.length)
+                        throw CaffFormatErrorException("Invalid header type CaffBlock format.");
+                    break;
+                case '\x02':
+                    caff.credits.read(file);
+                    if (read.length != 14 + caff.credits.lenghtOfCreator)
+                        throw CaffFormatErrorException("Invalid credit type CaffBlock format.");
+                    break;
+                case '\x03':
+                    caff.animation.emplace_back();
+                    caff.animation.at(caff.animation.size() - 1).read(file);
+                    if (read.length != caff.animation.at(caff.animation.size() - 1).ciff.header.headerSize +
+                                       caff.animation.at(caff.animation.size() - 1).ciff.header.contentSize + 8)
+                        throw CaffFormatErrorException("Invalid animation type CaffBlock format.");
+                    break;
+                default:
+                    if(!file.eof())
+                        throw CaffFormatErrorException("Invalid CaffBlock id.");
+                    break;
+            }
+        }
+
+        if (caff.header.numOfCiffs != caff.animation.size())
+            throw CaffFormatErrorException("Invalid number of CIFF files.");
+    }catch (CaffFormatErrorException e){
+        cout<<"Error while trying to parse CAFF file: "<<e.message()<<'\n';
+        exit(4);
+    }
     /** ---------------- OPEN & READ END ---------------- */
 
     /** ---------------- GENERATE GIF ---------------- */
