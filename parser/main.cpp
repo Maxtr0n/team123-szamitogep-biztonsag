@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include "parserClasses.h"
-#include "bitmap.h"
+#include "gif.h"
+
 using namespace std;
 
 int main(int argc, char* argv[]) {
@@ -72,7 +73,30 @@ int main(int argc, char* argv[]) {
 
     /** ---------------- OPEN & READ END ---------------- */
 
-    genBitmap(caff);
+    int width = caff.animation.at(0).ciff.header.width;
+    int height = caff.animation.at(0).ciff.header.height;
+
+    auto fileName = "bwgif.gif";
+    //int delay = 100;
+    GifWriter g;
+    GifBegin(&g, fileName, width, height, 100);
+    for (auto &f : caff.animation) {
+        vector<uint8_t> pixelToGif{};
+        size_t n = 0;
+
+        for (auto &p: f.ciff.content.pixels) {
+            pixelToGif.push_back(p);
+            n++;
+            if (n == 3) {
+                pixelToGif.push_back(255);
+                n = 0;
+            }
+        }
+        GifWriteFrame(&g, pixelToGif.data(), width, height, f.duration/10);
+    }
+    /*GifWriteFrame(&g, black.data(), width, height, delay);
+    GifWriteFrame(&g, white.data(), width, height, delay);*/
+    GifEnd(&g);
 
     return 0;
 }

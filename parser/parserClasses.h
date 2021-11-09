@@ -63,12 +63,12 @@ public:
     /** The header is followed by the actual pixels of the image in RGB format, with
     each component taking up 1 byte. This part of the CIFF file must contain
     exactly content_size number of bytes.*/
-    vector<char> pixels{};
+    vector<uint8_t> pixels{};
 
     void read(ifstream &ifstream, uint64_t contentSize) {
         for(int i=0; i<contentSize; i++){
-            char temp;
-            ifstream.read(&temp,1);
+            uint8_t temp;
+            ifstream.read(reinterpret_cast<char *>(&temp), 1);
             pixels.push_back(temp);
         }
     }
