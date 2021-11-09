@@ -2,6 +2,7 @@
 #include <fstream>
 #include "parserClasses.h"
 #include "gif.h"
+#include "json.h"
 
 using namespace std;
 
@@ -98,6 +99,39 @@ int main(int argc, char* argv[]) {
     GifEnd(&g);
 
     /** ---------------- GENERATE GIF END ---------------- */
+
+    /** ---------------- JSON ---------------- */
+
+    nlohmann::json j;
+
+    j["width"] = width;
+    j["height"] = height;
+
+    j["creation_date"]["year"] = caff.credits.year;
+    j["creation_date"]["month"] = caff.credits.month;
+    j["creation_date"]["day"] = caff.credits.day;
+    j["creation_date"]["hour"] = caff.credits.hour;
+    j["creation_date"]["minute"] = caff.credits.minute;
+
+    j["creator"] = caff.credits.creator;
+
+    int fc = 0;
+    for (auto &f: caff.animation) {
+        j["frames"][fc]["counter"] = fc;
+        j["frames"][fc]["caption"] = f.ciff.header.caption;
+        j["frames"][fc]["tags"] = f.ciff.header.tags;
+        fc++;
+    }
+
+    ofstream jsonOut(fileOut + ".json");
+    if (!jsonOut.is_open()) {
+        cerr << "Couldn't create " << fileOut << ".json file." << endl;
+        exit(6);
+    }
+    jsonOut << j;
+    jsonOut.close();
+
+    /** ---------------- JSON END ---------------- */
 
     return 0;
 }

@@ -122,6 +122,7 @@ public:
 };
 
 class CaffCredits {
+public:
     /** Creation date and time: the year, month, day, hour and minute of the CAFF
 	file's creation:
 		Y - year (2 bytes)
