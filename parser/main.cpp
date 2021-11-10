@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include "parserClasses.hpp"
 #include "gif.h"
 #include "json.hpp"
@@ -84,7 +83,7 @@ int main(int argc, char* argv[]) {
 
         if (caff.header.numOfCiffs != caff.animation.size())
             throw CaffFormatErrorException("Invalid number of CIFF files.");
-    }catch (CaffFormatErrorException e){
+    }catch (CaffFormatErrorException &e){
         cout<<"Error while trying to parse CAFF file: "<<e.message()<<'\n';
         exit(4);
     }
@@ -92,8 +91,8 @@ int main(int argc, char* argv[]) {
 
     /** ---------------- GENERATE GIF ---------------- */
 
-    int width = caff.animation.at(0).ciff.header.width;
-    int height = caff.animation.at(0).ciff.header.height;
+    uint32_t width = caff.animation.at(0).ciff.header.width;
+    uint32_t height = caff.animation.at(0).ciff.header.height;
 
     auto fileName = fileOut + string(".gif");
     GifWriter g;

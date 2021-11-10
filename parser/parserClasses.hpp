@@ -11,11 +11,10 @@ using namespace std;
 struct CaffFormatErrorException : public std::exception {
     string msg;
 
-    CaffFormatErrorException(const char* _msg){
+    explicit CaffFormatErrorException(const char* _msg){
         msg = _msg;
     }
-    string message () const throw ()
-    {
+    string message () const noexcept {
         return msg;
     }
 };
