@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "parserClasses.h"
+#include "parserClasses.hpp"
 #include "gif.h"
 #include "json.hpp"
 
@@ -148,6 +148,8 @@ int main(int argc, char* argv[]) {
     jsonOut.close();
 
     /** ---------------- JSON END ---------------- */
+
+    cout << "Parsing ended successfully." << endl;
 
     return 0;
 }

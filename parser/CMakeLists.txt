@@ -3,4 +3,4 @@ project(parser)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(parser main.cpp parserClasses.h gif.h json.hpp)
+add_executable(parser main.cpp parserClasses.hpp gif.h json.hpp parserClasses.cpp)
