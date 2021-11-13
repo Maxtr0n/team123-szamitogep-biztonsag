@@ -17,6 +17,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { ToastrModule } from 'ngx-toastr';
 
@@ -35,6 +36,7 @@ import { UploadImageComponent } from './dialogs/upload-image/upload-image.compon
 import { CommentsDialogComponent } from './dialogs/comments-dialog/comments-dialog.component';
 import { DeleteCaffDialogComponent } from './dialogs/delete-caff-dialog/delete-caff-dialog.component';
 import { DownloadCaffDialogComponent } from './dialogs/download-caff-dialog/download-caff-dialog.component';
+import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { DownloadCaffDialogComponent } from './dialogs/download-caff-dialog/down
     UploadImageComponent,
     CommentsDialogComponent,
     DeleteCaffDialogComponent,
-    DownloadCaffDialogComponent
+    DownloadCaffDialogComponent,
+    EditProfileDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -81,7 +84,8 @@ import { DownloadCaffDialogComponent } from './dialogs/download-caff-dialog/down
     ReactiveFormsModule,
     MatIconModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptorService, multi: true },
@@ -91,7 +95,8 @@ import { DownloadCaffDialogComponent } from './dialogs/download-caff-dialog/down
     UploadImageComponent,
     CommentsDialogComponent,
     DeleteCaffDialogComponent,
-    DownloadCaffDialogComponent
+    DownloadCaffDialogComponent,
+    EditProfileDialogComponent
   ],
 })
 export class AppModule { }

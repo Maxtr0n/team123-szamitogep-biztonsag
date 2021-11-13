@@ -9,7 +9,11 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  public getGifs() {
+  getUserData(userId: string) {
+    this.http.get(EndPoint.BASE_URL + '/users/' + userId).toPromise();
+  }
+
+  getGifs() {
     return this.http.get(EndPoint.BASE_URL + '/gif').toPromise();
   }
 }

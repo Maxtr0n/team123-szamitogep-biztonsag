@@ -1,12 +1,15 @@
 <h2 mat-dialog-title>Upload CAFF file</h2>
 <div mat-dialog-content class="form_container">
-    <input type="file"/>
-    <button mat-button color="primary" style="margin-top: 20px;">Preview</button>
+    <input type="file" (change)="fileUpload($event.target.files)" accept=".caff"/>
+    <button mat-button color="primary" style="margin-top: 20px;" (click)="preViewCaffFile()" [disabled]="!this.data.caffFile">Preview</button>
     <div class="preview_container">
-        <img [src]="defaultImage" width="100%">
+        <img src="./default-img.png" width="100%" *ngIf="!this.preViewWasClicked">
+        <div class="spinner_container" *ngIf="this.preViewWasClicked">
+          <mat-spinner></mat-spinner>
+        </div>        
     </div>
 </div>
 <div mat-dialog-actions class="button_container">
   <button mat-raised-button color="secondary" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="data">Upload</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" [disabled]="!this.preViewWasClicked || this.inProgress">Upload</button>
 </div>

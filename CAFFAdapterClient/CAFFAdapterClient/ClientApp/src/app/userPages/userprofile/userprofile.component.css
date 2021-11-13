@@ -8,12 +8,28 @@
 .data_container {
     width: 100%;
     display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;    
+    padding: 20px;
+    box-shadow:inset 0 0 3px black;        
+    border-radius: 7px;
+}
+
+.data_container .profile_data_container {
+    width: 50%;
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 20px;    
-    padding: 20px;
-    box-shadow: 0 0 3px black;        
+}
+
+.data_container .change_data_container {
+    width: 50%;    
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;    
 }
 
 .add_image_button_container {
@@ -37,7 +53,8 @@
 
 .content {    
     padding: 10px;
-    background-color: rgb(236, 231, 231);
+    box-shadow: inset 0 0 2px black;
+    border-radius: 0 0 5px 5px;
     display: flex;
 }
 
@@ -53,9 +70,9 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 }
 
 .icon-display {
-    transform: scale(1.5);    
+    transform: scale(1.0);    
  }

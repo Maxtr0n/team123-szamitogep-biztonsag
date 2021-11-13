@@ -5,11 +5,17 @@ import { CommentsDialogComponent } from 'src/app/dialogs/comments-dialog/comment
 import { DeleteCaffDialogComponent } from 'src/app/dialogs/delete-caff-dialog/delete-caff-dialog.component';
 import { UploadImageComponent } from 'src/app/dialogs/upload-image/upload-image.component';
 import { ChangePasswordDialogData } from 'src/app/entities/ChangePasswordDialogData';
+import { CommentData } from 'src/app/entities/CommentData';
 import { CommentsDialogData } from 'src/app/entities/CommentsDialogData';
 import { DeleteCaffDialogData } from 'src/app/entities/DeleteCaffDialogData';
 import { GifResponse } from 'src/app/entities/GifResponse';
 import { UploadImageDialogData } from 'src/app/entities/UploadImageDialogData';
+import { CommentService } from 'src/app/services/comment.service';
 import { UserService } from 'src/app/services/user.service';
+import { saveAs } from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
+import { EditProfileDialogData } from 'src/app/entities/EditProfileDialogData';
+import { EditProfileDialogComponent } from 'src/app/dialogs/edit-profile-dialog/edit-profile-dialog.component';
 
 @Component({
   selector: 'app-userprofile',
@@ -21,7 +27,10 @@ export class UserprofileComponent implements OnInit {
   email:string = 'test@test.com';
   gifs: GifResponse[] = [];
 
-  constructor(private dialog: MatDialog, private userService: UserService) { }
+  constructor(private dialog: MatDialog, 
+    private userService: UserService, 
+    private commentService: CommentService,
+    private toast: ToastrService) { }
 
   ngOnInit() {
     this.userService.getGifs().then(response => {
@@ -31,6 +40,14 @@ export class UserprofileComponent implements OnInit {
         this.gifs.push(gif);
       }
     });
+  }
+
+  editProfile() {
+    const dialogConfig = this.setEditProfileConfigs();
+    const dialogRef = this.dialog.open(
+      EditProfileDialogComponent,
+      dialogConfig
+    );
   }
 
   changePassword() {
@@ -63,12 +80,28 @@ export class UserprofileComponent implements OnInit {
     );
   }
 
-  seeComments() {
-    const dialogConfig = this.setSeeCommentsDialogConfigs();
+  downloadCaffFile() {
+    this.showDownloadInfo();
+  }
+
+  showDownloadInfo() {
+    this.toast.info('Download has been started.', 'Info');
+  }
+
+  async seeComments() {
+    const dialogConfig = await this.setSeeCommentsDialogConfigs();
     const dialogRef = this.dialog.open(
       CommentsDialogComponent,
       dialogConfig
     );
+  }
+
+  setEditProfileConfigs() {
+    const dialogConfig = this.setCommonConfig('450px');
+    var dialogData = new EditProfileDialogData();
+    dialogConfig.data = dialogData;
+    
+    return dialogConfig;
   }
 
   setPasswordDialogConfigs() {
@@ -95,11 +128,16 @@ export class UserprofileComponent implements OnInit {
     return dialogConfig;
   }
 
-  setSeeCommentsDialogConfigs() {
-    const dialogConfig = this.setCommonConfig('450px');
-    var dialogData = new CommentsDialogData();
-    dialogConfig.data = dialogData;
-    
+  async setSeeCommentsDialogConfigs() {
+    const dialogConfig = this.setCommonConfig('550px');
+    await this.commentService.getCommentsForGif('1').then(response => {
+      var responseEntity = response as CommentData[];     
+      console.log(responseEntity); 
+      var dialogData = new CommentsDialogData();
+      dialogData.comments = responseEntity;
+      dialogData.newComment = '';
+      dialogConfig.data = dialogData;            
+    });    
     return dialogConfig;
   }
 

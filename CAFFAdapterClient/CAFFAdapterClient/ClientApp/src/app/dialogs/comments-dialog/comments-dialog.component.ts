@@ -15,6 +15,17 @@ export class CommentsDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  sendComment() {
+    console.log(this.data.newComment);
+    this.data.newComment = '';    
+  }
+
+  sendCommentByEnter() {
+    if (this.data.newComment.length != 0) {
+      this.sendComment();
+    }
+  }
+
   onNoClick(): void {
     this.dialogRef.close();
   }

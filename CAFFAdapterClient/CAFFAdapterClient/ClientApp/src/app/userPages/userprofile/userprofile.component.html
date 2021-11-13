@@ -1,10 +1,17 @@
 <div class="main_container">
     <div class="data_container">
-        <p>Email: {{email}}</p>
-        <button mat-raised-button color="primary" (click)="changePassword()">Change Password</button>
+        <div class="profile_data_container">
+            <p>Firstname: <strong>Joseph</strong></p>
+            <p>Lastname: <strong>McAllister</strong></p>
+            <p style="margin-bottom: 0;">Email: <strong>{{email}}</strong></p>
+        </div>        
+        <div class="change_data_container">
+            <button mat-button color="primary" (click)="editProfile()"><mat-icon style="margin-right: 5px;">edit</mat-icon>Edit profile</button>
+            <button mat-raised-button color="primary" (click)="changePassword()">Change password</button>
+        </div>        
     </div>
     <div class="add_image_button_container">
-        <button mat-raised-button color="accent" (click)="uploadCaffFile()"><mat-icon>add</mat-icon>Upload CAFF file</button>
+        <button mat-raised-button (click)="uploadCaffFile()"><mat-icon>add</mat-icon>Upload CAFF file</button>
     </div>
     <div class="gif">
         <ng-container *ngFor="let gif of gifs">
@@ -13,13 +20,13 @@
                 <img [src]="gif.file" alt="this slowpoke moves" width="360" />
                 <div class="content">
                     <div class="button_container">
-                        <button mat-raised-button color="primary" (click)="seeComments()">See comments</button>
+                        <button mat-button color="primary" (click)="seeComments()">Comments</button>
                     </div>
                     <div class="icon_container">
                         <button mat-icon-button (click)="deleteCaffFile()">
                             <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">delete</mat-icon>
                         </button>
-                        <button mat-icon-button>
+                        <button mat-icon-button (click)="downloadCaffFile()">
                             <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">file_download</mat-icon>
                         </button>                        
                     </div>
