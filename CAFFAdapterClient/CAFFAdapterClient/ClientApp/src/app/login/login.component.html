@@ -1,0 +1,71 @@
+<div class="main_container">
+    <mat-tab-group fitInkBarToContent="true" mat-align-tabs="center">
+        <mat-tab label="User">
+            <div class="login_container">
+
+                <div class="login_form">
+                    <form class="example-form" [formGroup]="loginForm">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Email</mat-label>
+                            <input type="email" matInput formControlName="email" placeholder="pat@example.com">                        
+                            <mat-error *ngIf="loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')">
+                                Please enter a valid email address
+                            </mat-error>
+                            <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+                                Email is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+    
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Password</mat-label>
+                            <input type="password" matInput formControlName="password">                        
+                            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+                                Password is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+    
+                        <div class="button_container">
+                            <button mat-raised-button color="primary" [disabled]="!loginForm.valid" (click)="userLogin()">SIGN IN</button>
+                        </div>
+    
+                    </form>
+                </div>
+            
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Admin">
+            <div class="login_container">
+
+                <div class="login_form_admin">
+                    <form class="example-form" [formGroup]="adminLoginForm">
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Email</mat-label>
+                            <input type="email" matInput formControlName="email" placeholder="pat@example.com">                        
+                            <mat-error *ngIf="adminLoginForm.get('email')?.hasError('email') && !adminLoginForm.get('email')?.hasError('required')">
+                                Please enter a valid email address
+                            </mat-error>
+                            <mat-error *ngIf="adminLoginForm.get('email')?.hasError('required')">
+                                Email is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+    
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Password</mat-label>
+                            <input type="password" matInput formControlName="password">                        
+                            <mat-error *ngIf="adminLoginForm.get('password')?.hasError('required')">
+                                Password is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+    
+                        <div class="button_container">
+                            <button mat-stroked-button color="warn" [disabled]="!adminLoginForm.valid" (click)="adminLogin()">SIGN IN</button>
+                        </div>
+    
+                    </form>
+                </div>
+            
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

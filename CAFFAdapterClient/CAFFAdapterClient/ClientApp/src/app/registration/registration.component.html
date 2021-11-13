@@ -1,0 +1,38 @@
+<div class="registration_container">
+    <div class="login_form">
+        <form class="example-form" [formGroup]="registrationForm">
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Email</mat-label>
+                <input type="email" matInput formControlName="email" placeholder="pat@example.com">                        
+                <mat-error *ngIf="registrationForm.get('email')?.hasError('email') && !registrationForm.get('email')?.hasError('required')">
+                    Please enter a valid email address
+                </mat-error>
+                <mat-error *ngIf="registrationForm.get('email')?.hasError('required')">
+                    Email is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Password</mat-label>
+                <input type="password" matInput formControlName="password">                        
+                <mat-error *ngIf="registrationForm.get('password')?.hasError('required')">
+                    Password is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Confirm password</mat-label>
+                <input type="password" matInput formControlName="cPassword">                                        
+                <mat-error *ngIf="registrationForm.get('cPassword')?.invalid">
+                    Passwords <strong>do not match</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <div class="button_container">
+                <button mat-raised-button color="primary" [disabled]="!registrationForm.valid">SIGN UP</button>
+            </div>
+
+        </form>
+    </div>
+</div>

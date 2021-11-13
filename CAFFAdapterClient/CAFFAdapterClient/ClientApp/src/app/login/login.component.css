@@ -1,0 +1,53 @@
+.main_container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+
+/* ::ng-deep .mat-ink-bar {
+    background-color:#ee2925 !important;
+} */
+
+.login_container {
+    width: 100%;    
+    padding: 30px;    
+}
+
+.login_form {
+    padding: 20px;
+    box-shadow: 0 0 5px black;
+}
+
+.login_form_admin {
+    padding: 20px;
+    /* background-color: rgba(255, 0, 0, 0.2); */
+    border: 2px solid red;
+}
+
+.example-form {
+    min-width: 400px;
+    max-width: 500px;
+    width: 100%;    
+}
+  
+.example-full-width {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.button_container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button_container button {
+    width: 40%;
+    padding: 5px;    
+}
+
+.success_login {
+    background-color: cadetblue;
+}

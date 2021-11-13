@@ -1,0 +1,61 @@
+.main_container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.data_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;    
+    padding: 20px;
+    box-shadow: 0 0 3px black;        
+}
+
+.add_image_button_container {
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+.gif {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.gif_container {
+    display: flex;
+    flex-direction: column;    
+}
+
+.content {    
+    padding: 10px;
+    background-color: rgb(236, 231, 231);
+    display: flex;
+}
+
+.button_container {
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.icon_container {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-display {
+    transform: scale(1.5);    
+ }

@@ -1,0 +1,9 @@
+{
+    "/login/user/user@user.com/user": "/successUserLogin",
+    "/login/user/email1@user.com/pw": "/invalidEmailUserLogin",
+    "/login/user/email@user.com/pw1": "/invalidPasswordUserLogin",
+
+    "/login/admin/admin@admin.com/admin": "/successAdminLogin",
+    "/login/admin/email1@admin.com/pw": "/invalidEmailAdminLogin",
+    "/login/admin/email@admin.com/pw1": "/invalidPasswordAdminLogin"
+}
