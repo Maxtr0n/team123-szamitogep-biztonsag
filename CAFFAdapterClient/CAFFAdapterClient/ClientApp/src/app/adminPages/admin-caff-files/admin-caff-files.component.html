@@ -1,0 +1,26 @@
+<div class="main_container">
+    <div class="gif">
+        <ng-container *ngFor="let gif of gifs">
+
+            <div class="gif_container">
+                <img [src]="gif.file" alt="this slowpoke moves" width="360" />
+                <div class="content">
+                    <div class="button_container">
+                        <button mat-button color="primary" (click)="seeComments()">Comments</button>
+                    </div>
+                    <div class="icon_container">
+                        <button mat-icon-button (click)="deleteCaffFile()">
+                            <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">delete
+                            </mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="downloadCaffFile()">
+                            <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">
+                                file_download</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </ng-container>
+    </div>
+</div>

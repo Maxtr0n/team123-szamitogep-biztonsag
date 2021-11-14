@@ -26,6 +26,8 @@ import { LoginComponent } from './login/login.component';
 import { HeaderInterceptorService } from './services/header-interceptor.service';
 import { UserHomeComponent } from './userPages/user-home/user-home.component';
 import { AdminHomeComponent } from './adminPages/admin-home/admin-home.component';
+import { AdminUsersComponent } from './adminPages/admin-users/admin-users.component';
+import { AdminCaffFilesComponent } from './adminPages/admin-caff-files/admin-caff-files.component';
 
 import { AdminAuthGuard } from './guard/admin-auth.guard';
 import { UserAuthGuard } from './guard/user-auth.guard';
@@ -39,64 +41,68 @@ import { DownloadCaffDialogComponent } from './dialogs/download-caff-dialog/down
 import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    RegistrationComponent,
-    LoginComponent,
-    UserHomeComponent,
-    AdminHomeComponent,
-    UserprofileComponent,
-    CaffFilesComponent,
-    ChangePasswordDialogComponent,
-    UploadImageComponent,
-    CommentsDialogComponent,
-    DeleteCaffDialogComponent,
-    DownloadCaffDialogComponent,
-    EditProfileDialogComponent
-  ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'signin', component: LoginComponent },
-      { path: 'signup', component: RegistrationComponent },
-      
-      { path: 'admin/home', component: AdminHomeComponent, canActivate: [AdminAuthGuard] },
+    declarations: [
+        AppComponent,
+        NavMenuComponent,
+        HomeComponent,
+        RegistrationComponent,
+        LoginComponent,
+        UserHomeComponent,
+        AdminHomeComponent,
+        AdminUsersComponent,
+        AdminCaffFilesComponent,
+        UserprofileComponent,
+        CaffFilesComponent,
+        ChangePasswordDialogComponent,
+        UploadImageComponent,
+        CommentsDialogComponent,
+        DeleteCaffDialogComponent,
+        DownloadCaffDialogComponent,
+        EditProfileDialogComponent
+    ],
+    imports: [
+        BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+        HttpClientModule,
+        FormsModule,
+        RouterModule.forRoot([
+            { path: '', component: HomeComponent, pathMatch: 'full' },
+            { path: 'signin', component: LoginComponent },
+            { path: 'signup', component: RegistrationComponent },
 
-      { path: 'user/home', component: UserHomeComponent, canActivate: [UserAuthGuard] },
-      { path: 'user/caff', component: CaffFilesComponent, canActivate: [UserAuthGuard] },
-      { path: 'user/profile', component: UserprofileComponent, canActivate: [UserAuthGuard] },
-    ]),
-    BrowserAnimationsModule,
-    ToastrModule.forRoot({      
-      positionClass: 'toast-top-center',
-      closeButton: true
-    }),
+            { path: 'admin/home', component: AdminHomeComponent, canActivate: [AdminAuthGuard] },
+            { path: 'admin/caff', component: AdminCaffFilesComponent, canActivate: [AdminAuthGuard] },
+            { path: 'admin/users', component: AdminUsersComponent, canActivate: [AdminAuthGuard] },
 
-    MatButtonModule,
-    MatTabsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatProgressSpinnerModule
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptorService, multi: true },
-  ],
-  bootstrap: [AppComponent],
-  entryComponents: [ChangePasswordDialogComponent,
-    UploadImageComponent,
-    CommentsDialogComponent,
-    DeleteCaffDialogComponent,
-    DownloadCaffDialogComponent,
-    EditProfileDialogComponent
-  ],
+            { path: 'user/home', component: UserHomeComponent, canActivate: [UserAuthGuard] },
+            { path: 'user/caff', component: CaffFilesComponent, canActivate: [UserAuthGuard] },
+            { path: 'user/profile', component: UserprofileComponent, canActivate: [UserAuthGuard] },
+        ]),
+        BrowserAnimationsModule,
+        ToastrModule.forRoot({
+            positionClass: 'toast-top-center',
+            closeButton: true
+        }),
+
+        MatButtonModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        MatProgressSpinnerModule
+    ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptorService, multi: true },
+    ],
+    bootstrap: [AppComponent],
+    entryComponents: [ChangePasswordDialogComponent,
+        UploadImageComponent,
+        CommentsDialogComponent,
+        DeleteCaffDialogComponent,
+        DownloadCaffDialogComponent,
+        EditProfileDialogComponent
+    ],
 })
 export class AppModule { }

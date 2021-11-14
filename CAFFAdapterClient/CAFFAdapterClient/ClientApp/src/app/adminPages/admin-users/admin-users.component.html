@@ -1,0 +1,21 @@
+<div class="main_container">
+    <ng-container *ngFor="let user of users">
+
+        <div class="data_container">
+            <div class="profile_data_container">
+                <p>Firstname: <strong>Joseph</strong></p>
+                <p>Lastname: <strong>McAllister</strong></p>
+                <p style="margin-bottom: 0;">Email: <strong>email@email.com</strong></p>
+            </div>
+            <div class="change_data_container">
+                <button mat-button color="primary">
+                    <mat-icon style="margin-right: 5px;">edit</mat-icon>Edit profile
+                </button>
+                <button mat-button color="error">
+                    <mat-icon style="margin-right: 5px;">delete</mat-icon>Delete profile
+                </button>
+            </div>
+        </div>
+    </ng-container>
+
+</div>

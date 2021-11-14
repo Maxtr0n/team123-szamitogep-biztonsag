@@ -1,47 +1,60 @@
 <header>
-  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">CAFFAdapterClient</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
-        aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end" [ngClass]="{ show: isExpanded }">
-        <ul class="navbar-nav flex-grow">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" [routerLink]="['/']">CAFFAdapterClient</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+                aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end" [ngClass]="{ show: isExpanded }">
+                <ul class="navbar-nav flex-grow">
 
 
-          <ng-container *ngIf="!isUserLoggedIn && !isAdminLoggedIn">
-            <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
-              <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
-            </li>
-            <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
-              <a class="nav-link text-dark" [routerLink]="['/signin']">Sign In</a>
-            </li>
-            <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
-              <a class="nav-link text-dark" [routerLink]="['/signup']">Sign Up</a>
-            </li>
-          </ng-container>
+                    <ng-container *ngIf="!isUserLoggedIn && !isAdminLoggedIn">
+                        <li class="nav-item" [routerLinkActive]="['link-active']"
+                            [routerLinkActiveOptions]="{ exact: true }">
+                            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+                        </li>
+                        <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
+                            <a class="nav-link text-dark" [routerLink]="['/signin']">Sign In</a>
+                        </li>
+                        <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
+                            <a class="nav-link text-dark" [routerLink]="['/signup']">Sign Up</a>
+                        </li>
+                    </ng-container>
 
-          <ng-container *ngIf="isUserLoggedIn">
-            <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
-              <a class="nav-link text-dark" [routerLink]="['user/home']">Home</a>
-            </li>
-            <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
-              <a class="nav-link text-dark" [routerLink]="['user/caff']">Caff Images</a>
-            </li>
-            <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
-              <a class="nav-link text-dark" [routerLink]="['user/profile']">Profile</a>
-            </li>
-          </ng-container>
+                    <ng-container *ngIf="isUserLoggedIn">
+                        <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
+                            <a class="nav-link text-dark" [routerLink]="['user/home']">Home</a>
+                        </li>
+                        <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
+                            <a class="nav-link text-dark" [routerLink]="['user/caff']">Caff Images</a>
+                        </li>
+                        <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
+                            <a class="nav-link text-dark" [routerLink]="['user/profile']">Profile</a>
+                        </li>
+                    </ng-container>
 
-          <ng-container *ngIf="isUserLoggedIn || isAdminLoggedIn">
-            <li class="nav-item clickable" [routerLinkActive]="['link-active']" style="margin-left: 20px">
-              <a class="nav-link text-dark" (click)="logout()">Log out</a>
-            </li>
-          </ng-container>
+                    <ng-container *ngIf="isAdminLoggedIn">
+                        <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
+                            <a class="nav-link text-dark" [routerLink]="['admin/home']">Home</a>
+                        </li>
+                        <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
+                            <a class="nav-link text-dark" [routerLink]="['admin/caff']">Caff Images</a>
+                        </li>
+                        <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
+                            <a class="nav-link text-dark" [routerLink]="['admin/users']">Users</a>
+                        </li>
+                    </ng-container>
 
-        </ul>
-      </div>
-    </div>
-  </nav>
+                    <ng-container *ngIf="isUserLoggedIn || isAdminLoggedIn">
+                        <li class="nav-item clickable" [routerLinkActive]="['link-active']" style="margin-left: 20px">
+                            <a class="nav-link text-dark" (click)="logout()">Log out</a>
+                        </li>
+                    </ng-container>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
 </header>
