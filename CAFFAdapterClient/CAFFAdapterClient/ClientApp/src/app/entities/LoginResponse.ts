@@ -1,4 +1,4 @@
 export class LoginResponse {
-    success: boolean;
-    error?: string;
+    isSuccess: boolean;
+    token?: string;
 }
