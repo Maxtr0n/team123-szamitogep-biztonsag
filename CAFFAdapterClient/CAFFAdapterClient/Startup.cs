@@ -1,3 +1,10 @@
+using CAFFAdapterClient.FilterAttributes;
+using CAFFAdapterClient.Framework;
+using CAFFAdapterClient.Framework.Providers;
+using CAFFAdapterClient.Infrastructure;
+using CAFFAdapterClient.Providers;
+using CAFFAdapterClient.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,6 +12,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CAFFAdapterClient
 {
@@ -20,12 +28,44 @@ namespace CAFFAdapterClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(AppExceptionFilterAttribute));
+            });
+
+            services.AddSwaggerGen();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(GlobalConfigurations.SecurityKey),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddAuthorization();
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserProvider, UserProvider>();
+
+            services.AddInfrastructure();
+            services.AddInMemoryDb();
+            services.AddBusinessLogic();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,13 +89,24 @@ namespace CAFFAdapterClient
                 app.UseSpaStaticFiles();
             }
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
 
             app.UseSpa(spa =>
