@@ -43,10 +43,10 @@ export class LoginComponent implements OnInit {
 
     this.authService.userLogin(email, password).then(response => {      
       var responseEntity = response as LoginResponse;
-      if (responseEntity.success == true) {
+      if (responseEntity.isSuccess == true) {
         this.handleSuccessUserLogin();
       } else {
-        this.showError(responseEntity.error);
+        this.showError('Vmi');
       } 
     });
   }
@@ -64,10 +64,10 @@ export class LoginComponent implements OnInit {
 
     this.authService.adminLogin(email, password).then(response => {
       var responseEntity = response as LoginResponse;
-      if (responseEntity.success == true) {
+      if (responseEntity.isSuccess == true) {
         this.handleSuccessAdminLogin();
       } else {
-        this.showError(responseEntity.error);
+        this.showError('Vmi');
       }
     });
   }

@@ -18,6 +18,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { ToastrModule } from 'ngx-toastr';
 
@@ -91,7 +92,8 @@ import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-p
         MatIconModule,
         MatSnackBarModule,
         MatDialogModule,
-        MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptorService, multi: true },
