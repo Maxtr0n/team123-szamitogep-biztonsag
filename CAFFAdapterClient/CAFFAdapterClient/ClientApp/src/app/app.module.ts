@@ -40,6 +40,7 @@ import { CommentsDialogComponent } from './dialogs/comments-dialog/comments-dial
 import { DeleteCaffDialogComponent } from './dialogs/delete-caff-dialog/delete-caff-dialog.component';
 import { DownloadCaffDialogComponent } from './dialogs/download-caff-dialog/download-caff-dialog.component';
 import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component';
+import { DeleteUserDialogComponent } from './dialogs/delete-user-dialog/delete-user-dialog.component';
 
 @NgModule({
     declarations: [
@@ -59,7 +60,8 @@ import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-p
         CommentsDialogComponent,
         DeleteCaffDialogComponent,
         DownloadCaffDialogComponent,
-        EditProfileDialogComponent
+        EditProfileDialogComponent,
+        DeleteUserDialogComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

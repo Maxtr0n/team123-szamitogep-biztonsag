@@ -8,11 +8,11 @@
                 <p style="margin-bottom: 0;">Email: <strong>email@email.com</strong></p>
             </div>
             <div class="change_data_container">
-                <button mat-button color="primary">
+                <button mat-button color="primary" (click)="editProfile()">
                     <mat-icon style="margin-right: 5px;">edit</mat-icon>Edit profile
                 </button>
-                <button mat-button color="error">
-                    <mat-icon style="margin-right: 5px;">delete</mat-icon>Delete profile
+                <button mat-button color="error" (click)="deleteProfile()">
+                    <mat-icon style=" margin-right: 5px;">delete</mat-icon>Delete profile
                 </button>
             </div>
         </div>
