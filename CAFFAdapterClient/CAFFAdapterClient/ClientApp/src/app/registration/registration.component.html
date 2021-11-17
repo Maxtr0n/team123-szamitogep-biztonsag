@@ -33,11 +33,10 @@
 
             <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Password</mat-label>
-                <input type="password" matInput formControlName="password">                        
-                <mat-error *ngIf="registrationForm.get('password')?.hasError('required')">
-                    Password is <strong>required</strong>
-                </mat-error>
-            </mat-form-field>
+                <input type="password" matInput formControlName="password">                                               
+                <mat-error *ngIf="registrationForm.get('password')?.invalid" [innerHtml]="getErrorMessage()">                    
+                </mat-error>                
+            </mat-form-field>            
 
             <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Confirm password</mat-label>
@@ -48,7 +47,7 @@
             </mat-form-field>
 
             <div class="button_container">
-                <button mat-raised-button color="primary" [disabled]="!registrationForm.valid">SIGN UP</button>
+                <button mat-raised-button color="primary" [disabled]="!registrationForm.valid" (click)="register()">SIGN UP</button>
             </div>
 
         </form>
