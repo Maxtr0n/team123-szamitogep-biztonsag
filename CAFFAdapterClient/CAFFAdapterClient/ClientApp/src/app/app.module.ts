@@ -106,7 +106,8 @@ import { DeleteUserDialogComponent } from './dialogs/delete-user-dialog/delete-u
         CommentsDialogComponent,
         DeleteCaffDialogComponent,
         DownloadCaffDialogComponent,
-        EditProfileDialogComponent
+        EditProfileDialogComponent,
+        DeleteUserDialogComponent
     ],
 })
 export class AppModule { }

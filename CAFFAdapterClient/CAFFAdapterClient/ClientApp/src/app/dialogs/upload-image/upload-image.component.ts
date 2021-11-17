@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { UploadImageDialogData } from 'src/app/entities/UploadImageDialogData';
+import { CaffFileService } from 'src/app/services/caff-file.service';
 
 @Component({
   selector: 'app-upload-image',
@@ -12,11 +13,12 @@ export class UploadImageComponent implements OnInit {
 
   isFileValid: boolean = false;
   preViewWasClicked: boolean = false;
-  inProgress: boolean = false;
+  inProgress: boolean = false;  
  
   constructor(public dialogRef: MatDialogRef<UploadImageComponent>,
     @Inject(MAT_DIALOG_DATA) public data: UploadImageDialogData,
-    private toast: ToastrService) { }
+    private toast: ToastrService,
+    private caffFileService: CaffFileService) { }
 
   ngOnInit() {
   }
@@ -42,6 +44,7 @@ export class UploadImageComponent implements OnInit {
   preViewCaffFile() {
     this.preViewWasClicked = true;
     this.inProgress = true;
+    this.caffFileService.previewCaff(this.data.caffFile);
   }
   
   validateFileExtension(fileName) {

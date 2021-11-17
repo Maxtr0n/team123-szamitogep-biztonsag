@@ -16,6 +16,7 @@ import { saveAs } from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
 import { EditProfileDialogData } from 'src/app/entities/EditProfileDialogData';
 import { EditProfileDialogComponent } from 'src/app/dialogs/edit-profile-dialog/edit-profile-dialog.component';
+import { CaffFileService } from 'src/app/services/caff-file.service';
 
 @Component({
   selector: 'app-userprofile',

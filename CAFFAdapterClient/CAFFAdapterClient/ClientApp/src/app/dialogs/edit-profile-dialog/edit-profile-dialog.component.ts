@@ -19,8 +19,7 @@ export class EditProfileDialogComponent implements OnInit {
   ngOnInit() {
     this.editProfileFormGroup = this.formBuilder.group({
       firstName: [null, [Validators.required]],    
-      lastName: [null, [Validators.required]],    
-      email: [null, [Validators.required, Validators.email]],      
+      lastName: [null, [Validators.required]]          
     });
   }
 

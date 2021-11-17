@@ -3,7 +3,7 @@
     <input type="file" (change)="fileUpload($event.target.files)" accept=".caff"/>
     <button mat-button color="primary" style="margin-top: 20px;" (click)="preViewCaffFile()" [disabled]="!this.data.caffFile">Preview</button>
     <div class="preview_container">
-        <img src="./default-img.png" width="100%" *ngIf="!this.preViewWasClicked">
+        <img src="assets/default-img.png" width="100%" *ngIf="!this.preViewWasClicked">
         <div class="spinner_container" *ngIf="this.preViewWasClicked">
           <mat-spinner></mat-spinner>
         </div>        
