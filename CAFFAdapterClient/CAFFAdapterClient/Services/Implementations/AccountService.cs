@@ -34,7 +34,7 @@ namespace CAFFAdapterClient.Services
             IUserProvider userProvider,
             IMapper mapper)
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext; 
             _userManager = userManager;
             _userProvider = userProvider;
             _mapper = mapper;
@@ -74,6 +74,7 @@ namespace CAFFAdapterClient.Services
             return new LoginUserViewModel()
             {
                 IsSuccess = true,
+                Role = user.Role,
                 Token = tokenHandler.WriteToken(token)
             };
         }
