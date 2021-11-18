@@ -10,6 +10,7 @@ using CAFFAdapterClient.Infrastructure.Exceptions;
 using CAFFAdapterClient.ViewModels;
 using CAFFAdapterClient.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -111,6 +112,20 @@ namespace CAFFAdapterClient.Services
                 Lastname = user.Lastname,
                 Email = user.Email
             };
+        }
+
+        public async Task EditUserAsync(int id, JsonPatchDocument<EditUserDto> editUserDto)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
+
+            if (user == null)
+            {
+                throw new DataNotFoundException("User not found with the given Id.");
+            }
+
+            var userJson = _mapper.Map<JsonPatchDocument<User>>(editUserDto);
+            userJson.ApplyTo(user);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

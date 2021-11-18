@@ -1,5 +1,6 @@
 ﻿using CAFFAdapterClient.DataTransferObjects.Account;
 using CAFFAdapterClient.ViewModels.Account;
+using Microsoft.AspNetCore.JsonPatch;
 using System.Threading.Tasks;
 
 namespace CAFFAdapterClient.Services
@@ -9,5 +10,6 @@ namespace CAFFAdapterClient.Services
         Task RegisterUserAsync(RegisterUserDto registerUserDto);
         Task<LoginUserViewModel> LoginUserAsync(LoginUserDto loginUserDto);
         Task<GetUserInfoViewModel> GetUserInfoAsync(int id);
+        Task EditUserAsync(int id, JsonPatchDocument<EditUserDto> editUserDto);
     }
 }

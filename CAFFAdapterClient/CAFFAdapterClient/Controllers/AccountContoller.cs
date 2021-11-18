@@ -2,6 +2,7 @@
 using CAFFAdapterClient.Services;
 using CAFFAdapterClient.ViewModels.Account;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -38,6 +39,14 @@ namespace CAFFAdapterClient.Controllers
         {
             var result = await _accountService.GetUserInfoAsync(id);
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> EditUser(int id, [FromBody] JsonPatchDocument<EditUserDto> editUserDto)
+        {
+            //await _accountService.EditUserAsync(id, editUserDto);
+            return Ok();
         }
     }
 }
