@@ -21,6 +21,20 @@ export class EditProfileDialogComponent implements OnInit {
       firstName: [null, [Validators.required]],    
       lastName: [null, [Validators.required]]          
     });
+    this.editProfileFormGroup.patchValue({
+      firstName: this.data.firstName,
+      lastName: this.data.lastName
+    });
+  }
+
+  save() {
+    this.setCloseData();
+    this.dialogRef.close(this.data);
+  }
+
+  setCloseData() {
+    this.data.firstName = this.editProfileFormGroup.get('firstName').value;
+    this.data.lastName = this.editProfileFormGroup.get('lastName').value;
   }
 
   onNoClick(): void {

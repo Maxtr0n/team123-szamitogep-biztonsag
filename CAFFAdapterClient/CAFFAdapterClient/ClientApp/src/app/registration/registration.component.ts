@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ReqisterResponseErrorData } from '../entities/RegisterResponseErrorData';
+import { ReqisterResponseErrorData } from '../entities/register/RegisterResponseErrorData';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({

@@ -17,6 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 import { EditProfileDialogData } from 'src/app/entities/EditProfileDialogData';
 import { EditProfileDialogComponent } from 'src/app/dialogs/edit-profile-dialog/edit-profile-dialog.component';
 import { CaffFileService } from 'src/app/services/caff-file.service';
+import { UserInfo } from 'src/app/entities/user/UserInfo';
 
 @Component({
   selector: 'app-userprofile',
@@ -25,7 +26,9 @@ import { CaffFileService } from 'src/app/services/caff-file.service';
 })
 export class UserprofileComponent implements OnInit {
 
-  email:string = 'test@test.com';
+  firstname:string = '';
+  lastname: string = '';
+  email:string = '';  
   gifs: GifResponse[] = [];
 
   constructor(private dialog: MatDialog, 
@@ -41,6 +44,20 @@ export class UserprofileComponent implements OnInit {
         this.gifs.push(gif);
       }
     });
+    this.loadUserInfo();
+  }
+
+  loadUserInfo() {
+    this.userService.getUserData().then(
+      response => {
+        var userInfo = response as UserInfo;
+        this.firstname = userInfo.firstname;
+        this.lastname = userInfo.lastname;
+        this.email = userInfo.email;
+      },
+      err => {
+
+      });
   }
 
   editProfile() {
@@ -49,6 +66,9 @@ export class UserprofileComponent implements OnInit {
       EditProfileDialogComponent,
       dialogConfig
     );
+    dialogRef.afterClosed().subscribe((data: EditProfileDialogData) => {
+      console.log(data);
+    });
   }
 
   changePassword() {
@@ -100,6 +120,8 @@ export class UserprofileComponent implements OnInit {
   setEditProfileConfigs() {
     const dialogConfig = this.setCommonConfig('450px');
     var dialogData = new EditProfileDialogData();
+    dialogData.firstName = this.firstname;
+    dialogData.lastName = this.lastname;
     dialogConfig.data = dialogData;
     
     return dialogConfig;

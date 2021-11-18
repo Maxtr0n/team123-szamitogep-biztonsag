@@ -1,6 +1,7 @@
 ﻿using CAFFAdapterClient.DataTransferObjects.Account;
 using CAFFAdapterClient.Services;
 using CAFFAdapterClient.ViewModels.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -28,6 +29,14 @@ namespace CAFFAdapterClient.Controllers
         public async Task<ActionResult<LoginUserViewModel>> Login([FromBody] LoginUserDto loginUserDto)
         {
             var result = await _accountService.LoginUserAsync(loginUserDto);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetUserInfoViewModel>> GetUserInfo(int id)
+        {
+            var result = await _accountService.GetUserInfoAsync(id);
             return Ok(result);
         }
     }

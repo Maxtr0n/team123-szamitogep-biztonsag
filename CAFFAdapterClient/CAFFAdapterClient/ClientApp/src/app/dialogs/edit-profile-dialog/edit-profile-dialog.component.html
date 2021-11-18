@@ -3,7 +3,7 @@
     <form [formGroup]="editProfileFormGroup" class="form_container">
         <mat-form-field appearance="outline">
             <mat-label>Firstname</mat-label>
-            <input matInput required
+            <input matInput required 
             type="text" formControlName="firstName">
             <mat-error *ngIf="editProfileFormGroup.get('firstName')?.hasError('required')">
                 Firstname is <strong>required</strong>
@@ -21,5 +21,5 @@
 </div>
 <div mat-dialog-actions class="button_container">
   <button mat-raised-button color="secondary" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="data" [disabled]="editProfileFormGroup.invalid">Save</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="editProfileFormGroup.invalid">Save</button>
 </div>

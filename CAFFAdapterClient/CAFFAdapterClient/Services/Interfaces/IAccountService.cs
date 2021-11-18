@@ -8,5 +8,6 @@ namespace CAFFAdapterClient.Services
     {
         Task RegisterUserAsync(RegisterUserDto registerUserDto);
         Task<LoginUserViewModel> LoginUserAsync(LoginUserDto loginUserDto);
+        Task<GetUserInfoViewModel> GetUserInfoAsync(int id);
     }
 }

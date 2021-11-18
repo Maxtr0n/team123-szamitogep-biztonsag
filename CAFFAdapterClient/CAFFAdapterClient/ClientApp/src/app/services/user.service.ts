@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EndPoint } from './endpoints';
+import { SessionData } from './sessionData';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,9 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUserData(userId: string) {
-    this.http.get(EndPoint.BASE_URL + '/users/' + userId).toPromise();
+  getUserData() {
+    var userId = sessionStorage.getItem(SessionData.USER_ID);
+    return this.http.get(EndPoint.BASE_URL_2 + '/account/' + userId).toPromise();
   }
 
   getGifs() {

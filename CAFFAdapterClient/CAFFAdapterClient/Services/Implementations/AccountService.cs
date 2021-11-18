@@ -38,7 +38,7 @@ namespace CAFFAdapterClient.Services
             _userManager = userManager;
             _userProvider = userProvider;
             _mapper = mapper;
-        }
+        }  
 
         public async Task<LoginUserViewModel> LoginUserAsync(LoginUserDto loginUserDto)
         {
@@ -94,6 +94,23 @@ namespace CAFFAdapterClient.Services
             {
                 throw new BusinessLogicException(string.Join(", ", identityResult.Errors.Select(i => i.Description)));
             }
+        }
+
+        public async Task<GetUserInfoViewModel> GetUserInfoAsync(int id)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
+
+            if (user == null)
+            {
+                throw new DataNotFoundException("User not found with the given Id.");
+            }
+
+            return new GetUserInfoViewModel()
+            {
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                Email = user.Email
+            };
         }
     }
 }
