@@ -86,9 +86,11 @@ export class RegistrationComponent implements OnInit {
   }
 
   register() {
+    var firstname = this.registrationForm.get('firstName').value;
+    var lastname = this.registrationForm.get('lastName').value;
     var email = this.registrationForm.get('email').value;
     var password = this.registrationForm.get('password').value;
-    this.authService.registerUser(email, password).subscribe(
+    this.authService.registerUser(firstname, lastname, email, password).subscribe(
       res => {
         this.handleSuccessRegistration();
       },

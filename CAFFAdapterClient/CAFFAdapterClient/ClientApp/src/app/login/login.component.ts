@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoginResponse } from '../entities/LoginResponse';
+import { LoginResponse } from '../entities/login/LoginResponse';
 import { AuthenticationService } from '../services/authentication.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -41,19 +41,21 @@ export class LoginComponent implements OnInit {
     var email = this.loginForm.value.email;
     var password = this.loginForm.value.password;
 
-    this.authService.userLogin(email, password).then(response => {      
+    this.authService.login(email, password).then(response => {      
       var responseEntity = response as LoginResponse;
-      if (responseEntity.success == true) {
-        this.handleSuccessUserLogin();
+      if (responseEntity.isSuccess == true && responseEntity.role == 1) {
+        this.handleSuccessUserLogin(responseEntity.token);
+        this.authService.decodeToken();
       } else {
-        this.showError('Vmi');
+        this.showError('Invalid email or password.');
       } 
     });
   }
 
-  handleSuccessUserLogin() {
+  handleSuccessUserLogin(jwtToken: string) {
     this.showSuccess();
     sessionStorage.setItem(SessionData.USER_LOGGED_IN, 'true');
+    sessionStorage.setItem(SessionData.TOKEN, jwtToken);
     this.authService.userLoggedin();
     this.router.navigate(['user/home']);
   }
@@ -62,19 +64,21 @@ export class LoginComponent implements OnInit {
     var email = this.adminLoginForm.value.email;
     var password = this.adminLoginForm.value.password;
 
-    this.authService.adminLogin(email, password).then(response => {
+    this.authService.login(email, password).then(response => {
       var responseEntity = response as LoginResponse;
-      if (responseEntity.success == true) {
-        this.handleSuccessAdminLogin();
+      if (responseEntity.isSuccess == true && responseEntity.role == 0) {
+        this.handleSuccessAdminLogin(responseEntity.token);
+        this.authService.decodeToken();
       } else {
-        this.showError('Vmi');
+        this.showError('Invalid email or password.');
       }
     });
   }
 
-  handleSuccessAdminLogin() {
+  handleSuccessAdminLogin(jwtToken: string) {
     this.showSuccess();
     sessionStorage.setItem(SessionData.ADMIN_LOGGED_IN, 'true');
+    sessionStorage.setItem(SessionData.TOKEN, jwtToken);
     this.authService.adminLoggedin();
     this.router.navigateByUrl('admin/home');
   }
@@ -86,7 +90,7 @@ export class LoginComponent implements OnInit {
   }  
 
   showError(message) {
-    this.toast.error('Login failed', message);
+    this.toast.error(message, 'Login failed');
   }
 
 }

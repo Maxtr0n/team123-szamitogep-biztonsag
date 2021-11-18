@@ -83,6 +83,8 @@ namespace CAFFAdapterClient.Services
         {
             var identityResult = await _userManager.CreateAsync(new User()
             {
+                Firstname = registerUserDto.Firstname,
+                Lastname = registerUserDto.Lastname,
                 Role = UserRoles.Standard,
                 Email = registerUserDto.Email,
                 UserName = Guid.NewGuid().ToString(),
