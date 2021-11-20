@@ -5,10 +5,10 @@ namespace CAFFAdapterClient.DataTransferObjects.Account
     public class RegisterUserDto
     {
         [Required]
-        public string Firstname { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
-        public string Lastname { get; set; }
+        public string LastName { get; set; }
 
         [Required]
         [EmailAddress]

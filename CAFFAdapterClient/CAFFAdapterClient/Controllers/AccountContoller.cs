@@ -1,5 +1,7 @@
 ﻿using CAFFAdapterClient.DataTransferObjects.Account;
+using CAFFAdapterClient.Infrastructure.Constants;
 using CAFFAdapterClient.Services;
+using CAFFAdapterClient.ViewModels;
 using CAFFAdapterClient.ViewModels.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
@@ -8,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace CAFFAdapterClient.Controllers
 {
+    [Authorize(Policy = AppPolicies.Administrator)]
     [ApiController]
     [Route("account")]
     public class AccountContoller : ControllerBase
@@ -19,6 +22,7 @@ namespace CAFFAdapterClient.Controllers
             _accountService = accountService;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserDto registerUserDto)
         {
@@ -26,6 +30,7 @@ namespace CAFFAdapterClient.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<LoginUserViewModel>> Login([FromBody] LoginUserDto loginUserDto)
         {
@@ -33,7 +38,6 @@ namespace CAFFAdapterClient.Controllers
             return Ok(result);
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetUserInfoViewModel>> GetUserInfo(int id)
         {
@@ -41,12 +45,24 @@ namespace CAFFAdapterClient.Controllers
             return Ok(result);
         }
 
-        [Authorize]
         [HttpPatch("{id}")]
         public async Task<IActionResult> EditUser(int id, [FromBody] JsonPatchDocument<EditUserDto> editUserDto)
         {
             //await _accountService.EditUserAsync(id, editUserDto);
             return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteByIdAsync(int id)
+        {
+            await _accountService.DeleteByIdAsync(id);
+            return NoContent();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<TableViewModel<UserRowViewModel>>> GetAsync()
+        {
+            return await _accountService.GetAsync();
         }
     }
 }

@@ -1,7 +1,9 @@
+using CAFFAdapterClient.Domain.Enums;
 using CAFFAdapterClient.FilterAttributes;
 using CAFFAdapterClient.Framework;
 using CAFFAdapterClient.Framework.Providers;
 using CAFFAdapterClient.Infrastructure;
+using CAFFAdapterClient.Infrastructure.Constants;
 using CAFFAdapterClient.Providers;
 using CAFFAdapterClient.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,7 +61,15 @@ namespace CAFFAdapterClient
                 };
             });
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(AppPolicies.Administrator, policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireAssertion(context => context.User.HasClaim(c => c.Type == AppClaimTypes.Role && c.Value.Equals(UserRoles.Admin.ToString())));
+                });
+            });
+
             services.AddHttpContextAccessor();
             services.AddScoped<IUserProvider, UserProvider>();
 

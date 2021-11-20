@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CAFFAdapterClient.Services.Implementations;
+using CAFFAdapterClient.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CAFFAdapterClient.Services
 {
@@ -8,7 +10,9 @@ namespace CAFFAdapterClient.Services
         {
             services.AddAutoMapper(typeof(WireUpExtensions));
 
+            services.AddScoped<IDataseedService, DataseedService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ICaffFilesServices, CaffFilesServices>();
 
             return services;
         }

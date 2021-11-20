@@ -11,6 +11,7 @@ using CAFFAdapterClient.ViewModels;
 using CAFFAdapterClient.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -84,8 +85,8 @@ namespace CAFFAdapterClient.Services
         {
             var identityResult = await _userManager.CreateAsync(new User()
             {
-                Firstname = registerUserDto.Firstname,
-                Lastname = registerUserDto.Lastname,
+                FirstName = registerUserDto.FirstName,
+                Lastname = registerUserDto.LastName,
                 Role = UserRoles.Standard,
                 Email = registerUserDto.Email,
                 UserName = Guid.NewGuid().ToString(),
@@ -108,7 +109,7 @@ namespace CAFFAdapterClient.Services
 
             return new GetUserInfoViewModel()
             {
-                Firstname = user.Firstname,
+                Firstname = user.FirstName,
                 Lastname = user.Lastname,
                 Email = user.Email
             };
@@ -126,6 +127,39 @@ namespace CAFFAdapterClient.Services
             var userJson = _mapper.Map<JsonPatchDocument<User>>(editUserDto);
             userJson.ApplyTo(user);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteByIdAsync(int id)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id)
+                ?? throw new DataNotFoundException();
+
+            user.IsDeleted = true;
+
+            _dbContext.Users.Update(user);
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ActionResult<TableViewModel<UserRowViewModel>>> GetAsync()
+        {
+            var items = _dbContext.Users
+                .AsNoTracking()
+                .Select(x => new UserRowViewModel
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName
+                })
+                .ToList();
+
+            var count = items.Count();
+
+            return new TableViewModel<UserRowViewModel>
+            {
+                Items = items,
+                Count = count
+            };
         }
     }
 }

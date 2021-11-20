@@ -1,10 +1,10 @@
 ﻿using CAFFAdapterClient.DataTransferObjects.CaffFiles;
+using CAFFAdapterClient.Extensions;
 using CAFFAdapterClient.Services;
 using CAFFAdapterClient.ViewModels;
 using CAFFAdapterClient.ViewModels.CaffFiles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace CAFFAdapterClient.Controllers
@@ -24,43 +24,50 @@ namespace CAFFAdapterClient.Controllers
         [HttpGet]
         public async Task<ActionResult<TableViewModel<CaffFileRowViewModel>>> Get()
         {
-            throw new NotImplementedException();
+            return await _caffFilesServices.GetAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CaffFileViewModel>> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _caffFilesServices.GetByIdAsync(id);
         }
 
         [HttpGet("{id}/preview")]
-        public async Task<FileStreamResult> PreviewByIdAsync(int id)
+        public async Task<FileStreamResult> GetPreviewByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _caffFilesServices.GetPreviewByIdAsync(id);
+            return result.ToFile();
         }
 
         [HttpGet("{id}/download")]
         public async Task<FileStreamResult> DownloadByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _caffFilesServices.GetFileByIdAsync(id);
+            return result.ToFile();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CreateCaffFileDto dto)
+        public async Task<IActionResult> PostAsync(CreateCaffFileDto dto)
         {
-            throw new NotImplementedException();
+            await _caffFilesServices.CreateAsync(dto);
+
+            return Ok();
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, UpdateCaffFileDto dto)
         {
-            throw new NotImplementedException();
+            await _caffFilesServices.UpdateAsync(id, dto);
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            await _caffFilesServices.DeleteByIdAsync(id);
+            return NoContent();
         }
     }
 }

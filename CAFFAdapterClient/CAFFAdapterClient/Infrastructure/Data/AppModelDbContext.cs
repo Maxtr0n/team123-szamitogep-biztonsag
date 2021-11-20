@@ -1,4 +1,5 @@
 ﻿using CAFFAdapterClient.Domain;
+using CAFFAdapterClient.Infrastructure.Data.Builders;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -7,6 +8,7 @@ namespace CAFFAdapterClient.Infrastructure.Data
     public class AppModelDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<CaffFile> CaffFiles { get; set; }
 
         public AppModelDbContext(DbContextOptions<AppModelDbContext> options) : base(options) { }
 
@@ -21,7 +23,8 @@ namespace CAFFAdapterClient.Infrastructure.Data
                 c.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            // new TodoBuilder(builder);
+            new UserBuilder(builder);
+            new CaffFileBuilder(builder);
             // new TodoCategorykBuilder(builder);
         }
     }

@@ -12,11 +12,12 @@ namespace CAFFAdapterClient.Infrastructure.Data.Builders
         {
             entityBuilder = builder.Entity<T>();
 
-            #region ITypedIdEntity
             entityBuilder
-                .Property(nameof(EntityBase.Id))
+                .Property(x => x.Id)
                 .UseIdentityColumn();
-            #endregion
+
+            entityBuilder
+                .HasQueryFilter(x => !x.IsDeleted);
         }
     }
 }
