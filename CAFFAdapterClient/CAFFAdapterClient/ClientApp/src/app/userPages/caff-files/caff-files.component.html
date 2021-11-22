@@ -1,1 +1,31 @@
-<p>caff-files works!</p>
+<div class="main_container">
+    <app-loading [isLoading]="isLoading"></app-loading>
+    <div class="gif">
+        <ng-container *ngFor="let gif of gifs">
+            <div class="gif_container">
+                <div class="description">
+                    <div class="user">
+                        <strong>{{gif.user}}</strong>
+                    </div>
+                    <div class="detailes">
+                        <i>{{gif.description}}</i>
+                    </div>                    
+                </div>  
+                <div class="gif_main">
+                    <img [src]="gif.file" width="100%"/>
+                </div>                              
+                <div class="content">
+                    <div class="button_container">
+                        <button mat-button color="primary" (click)="seeComments()">Comments</button>
+                    </div>
+                    <div class="icon_container">                        
+                        <button mat-icon-button (click)="downloadCaffFile()">
+                            <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">file_download</mat-icon>
+                        </button>                        
+                    </div>
+                </div>
+            </div>
+    
+        </ng-container>
+    </div>
+</div>

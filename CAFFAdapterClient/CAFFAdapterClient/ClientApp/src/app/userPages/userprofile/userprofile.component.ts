@@ -26,6 +26,7 @@ import { UserInfo } from 'src/app/entities/user/UserInfo';
 })
 export class UserprofileComponent implements OnInit {
 
+  isLoading = true;
   firstname:string = '';
   lastname: string = '';
   email:string = '';  
@@ -36,28 +37,23 @@ export class UserprofileComponent implements OnInit {
     private commentService: CommentService,
     private toast: ToastrService) { }
 
-  ngOnInit() {
+  ngOnInit() {   
     this.userService.getGifs().then(response => {
       var gif = response as GifResponse;      
       this.base64gif = gif.file;
       for (var i = 0; i < 6; i++) {
         this.gifs.push(gif);
       }
+      this.isLoading = false;
     });
     this.loadUserInfo();
   }
 
   loadUserInfo() {
-    this.userService.getUserData().then(
-      response => {
-        var userInfo = response as UserInfo;
-        this.firstname = userInfo.firstname;
-        this.lastname = userInfo.lastname;
-        this.email = userInfo.email;
-      },
-      err => {
-
-      });
+    var token = this.userService.decodeToken();
+    this.firstname = token.firstName;
+    this.lastname = token.lastName;
+    this.email = token.email;
   }
 
   editProfile() {

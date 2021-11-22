@@ -17,7 +17,7 @@ namespace CAFFAdapterClient.FilterAttributes
                 context.ExceptionHandled = true;
                 context.Result = new NoContentResult();
             }
-            else if (exception is BusinessLogicException)
+            else if (exception is BusinessLogicException || exception is InvalidPasswordException)
             {
                 context.ExceptionHandled = true;
                 context.Result = new BadRequestObjectResult(new

@@ -3,8 +3,6 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { LoginRequest } from '../entities/login/LoginRequest';
 import { RegisterRequestData } from '../entities/register/RegisterRequestData';
 import { EndPoint } from './endpoints';
-import jwt_decode  from 'jwt-decode';
-import { SessionData } from './sessionData';
 
 @Injectable({
   providedIn: 'root'
@@ -39,15 +37,5 @@ export class AuthenticationService {
 
   adminLoggedin() {
     this.adminLoggedIn.emit(true);
-  }
-
-  decodeToken() {
-    var tokenInfo = {
-      "http://schemas.xmlsoap.org/ws/2009/09/claims/userid": ""
-    };
-    var token = sessionStorage.getItem(SessionData.TOKEN);
-    tokenInfo = jwt_decode(token);
-    var userId = tokenInfo['http://schemas.xmlsoap.org/ws/2009/09/claims/userid'];
-    sessionStorage.setItem(SessionData.USER_ID, userId);
-  }
+  }  
 }

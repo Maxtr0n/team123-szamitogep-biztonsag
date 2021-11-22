@@ -44,8 +44,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(email, password).then(response => {      
       var responseEntity = response as LoginResponse;
       if (responseEntity.isSuccess == true && responseEntity.role == 1) {
-        this.handleSuccessUserLogin(responseEntity.token);
-        this.authService.decodeToken();
+        this.handleSuccessUserLogin(responseEntity.token);        
       } else {
         this.showError('Invalid email or password.');
       } 
@@ -67,8 +66,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(email, password).then(response => {
       var responseEntity = response as LoginResponse;
       if (responseEntity.isSuccess == true && responseEntity.role == 0) {
-        this.handleSuccessAdminLogin(responseEntity.token);
-        this.authService.decodeToken();
+        this.handleSuccessAdminLogin(responseEntity.token);        
       } else {
         this.showError('Invalid email or password.');
       }

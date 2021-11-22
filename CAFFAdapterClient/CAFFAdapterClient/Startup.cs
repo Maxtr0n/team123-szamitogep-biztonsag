@@ -1,3 +1,4 @@
+using AutoMapper;
 using CAFFAdapterClient.Domain.Enums;
 using CAFFAdapterClient.FilterAttributes;
 using CAFFAdapterClient.Framework;
@@ -6,6 +7,7 @@ using CAFFAdapterClient.Infrastructure;
 using CAFFAdapterClient.Infrastructure.Constants;
 using CAFFAdapterClient.Providers;
 using CAFFAdapterClient.Services;
+using CAFFAdapterClient.Services.MappingProfiles;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace CAFFAdapterClient
 {
@@ -30,18 +33,47 @@ namespace CAFFAdapterClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddNewtonsoftJson();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
-            });
+            });            
 
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(AppExceptionFilterAttribute));
             });
 
-            services.AddSwaggerGen();
+            //services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProject", Version = "v1.0.0" });
+
+                var securitySchema = new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
+
+                c.AddSecurityDefinition("Bearer", securitySchema);
+
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    { securitySchema, new[] { "Bearer" } }
+                };
+
+                c.AddSecurityRequirement(securityRequirement);
+
+            });
 
             services.AddAuthentication(options =>
             {
@@ -76,6 +108,11 @@ namespace CAFFAdapterClient
             services.AddInfrastructure();
             services.AddInMemoryDb();
             services.AddBusinessLogic();
+
+            var config = new MapperConfiguration(c => {
+                c.AddProfile<UserProfile>();
+            });
+            services.AddSingleton<IMapper>(s => config.CreateMapper());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -130,7 +167,7 @@ namespace CAFFAdapterClient
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
-            });
+            });            
         }
     }
 }

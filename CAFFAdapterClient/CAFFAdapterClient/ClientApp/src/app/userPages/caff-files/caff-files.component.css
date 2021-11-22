@@ -1,0 +1,72 @@
+.main_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.gif {
+    width: 100%;
+    display: flex;
+    flex-direction: column;    
+    align-items: center;
+    justify-content: flex-start;
+    gap: 50px;
+}
+
+.gif_main {    
+    box-shadow: inset 0 0 2px black;
+    border-radius: 5px 5px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gif_container {
+    width: 60%;
+    display: flex;
+    flex-direction: column;    
+}
+
+.description {
+    box-shadow: inset 0 0 2px black;
+    border-radius: 5px 5px 0 0;
+    padding: 10px;    
+}
+
+.description .user {
+    padding: 10px;
+    font-size: larger;
+}
+
+.description .detailes {
+    border-top: 1px solid gray;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.content {    
+    padding: 10px;
+    box-shadow: inset 0 0 2px black;
+    border-radius: 0 0 5px 5px;
+    display: flex;
+}
+
+.button_container {
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.icon_container {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+.icon-display {
+    transform: scale(1.0);    
+ }

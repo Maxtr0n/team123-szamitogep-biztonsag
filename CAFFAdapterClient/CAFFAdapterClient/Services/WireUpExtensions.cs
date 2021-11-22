@@ -13,6 +13,7 @@ namespace CAFFAdapterClient.Services
             services.AddScoped<IDataseedService, DataseedService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICaffFilesServices, CaffFilesServices>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

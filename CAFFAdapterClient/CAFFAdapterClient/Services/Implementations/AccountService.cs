@@ -60,7 +60,9 @@ namespace CAFFAdapterClient.Services
 
             var claims = new List<Claim>();
             claims.Add(new Claim(AppClaimTypes.UserId, user.Id.ToString()));
-            claims.Add(new Claim(AppClaimTypes.Name, user.UserName));
+            claims.Add(new Claim(AppClaimTypes.FirstName, user.FirstName));
+            claims.Add(new Claim(AppClaimTypes.Lastname, user.Lastname));
+            claims.Add(new Claim(AppClaimTypes.Email, user.Email));
             claims.Add(new Claim(AppClaimTypes.Role, user.Role.ToString()));
 
             var tokenDescriptor = new SecurityTokenDescriptor()
@@ -123,6 +125,8 @@ namespace CAFFAdapterClient.Services
             {
                 throw new DataNotFoundException("User not found with the given Id.");
             }
+            var fname = editUserDto.Operations.FirstOrDefault(o => o.path == "firstname");
+            Console.WriteLine(fname.value.ToString());
 
             var userJson = _mapper.Map<JsonPatchDocument<User>>(editUserDto);
             userJson.ApplyTo(user);

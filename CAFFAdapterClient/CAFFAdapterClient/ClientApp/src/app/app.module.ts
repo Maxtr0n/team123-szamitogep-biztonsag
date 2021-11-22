@@ -41,6 +41,7 @@ import { DeleteCaffDialogComponent } from './dialogs/delete-caff-dialog/delete-c
 import { DownloadCaffDialogComponent } from './dialogs/download-caff-dialog/download-caff-dialog.component';
 import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component';
 import { DeleteUserDialogComponent } from './dialogs/delete-user-dialog/delete-user-dialog.component';
+import { LoadingComponent } from './loading/loading/loading.component';
 
 @NgModule({
     declarations: [
@@ -61,7 +62,8 @@ import { DeleteUserDialogComponent } from './dialogs/delete-user-dialog/delete-u
         DeleteCaffDialogComponent,
         DownloadCaffDialogComponent,
         EditProfileDialogComponent,
-        DeleteUserDialogComponent
+        DeleteUserDialogComponent,
+        LoadingComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -22,12 +22,23 @@ namespace CAFFAdapterClient.Services.Implementations
 
         public async Task SeedAsync()
         {
-            var identityResult = await _userManager.CreateAsync(new User()
+            var adminResult = await _userManager.CreateAsync(new User()
             {
                 Role = UserRoles.Admin,
                 Email = "admin@example.com",
                 UserName = "admin",
+                FirstName = "John",
+                Lastname = "Admin",
             }, "Admin123.");
+
+            var userResult = await _userManager.CreateAsync(new User()
+            {
+                Role = UserRoles.Standard,
+                Email = "test@test.com",
+                UserName = "user",
+                FirstName = "Joseph",
+                Lastname = "McAllsiter",
+            }, "Username9!");
         }
     }
 }

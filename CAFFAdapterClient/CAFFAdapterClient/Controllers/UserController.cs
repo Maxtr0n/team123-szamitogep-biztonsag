@@ -1,0 +1,41 @@
+using CAFFAdapterClient.DataTransferObjects.Account;
+using CAFFAdapterClient.Infrastructure.Constants;
+using CAFFAdapterClient.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
+
+namespace CAFFAdapterClient.Controllers
+{
+    [Authorize]
+    [ApiController]
+    [Route("user")]
+    public class UserController : ControllerBase
+    {
+        private readonly IUserService _userService;
+        private readonly int userId;
+
+        public UserController(IUserService userService, IHttpContextAccessor httpContextAccessor)
+        {
+            _userService = userService;           
+            userId = int.Parse(httpContextAccessor.HttpContext.User.FindFirst(AppClaimTypes.UserId).Value);
+        }
+
+        [HttpPatch("/editprofile")]
+        public async Task<IActionResult> EditUser([FromBody] JsonPatchDocument<EditUserDto> editUserDto)
+        {            
+            await _userService.EditUserAsync(userId, editUserDto);
+            return Ok();
+        }
+
+        [HttpPut("/changepassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+        {
+            await _userService.ChangePasswordAsync(userId, changePasswordDto);
+            return Ok();
+        }
+    }
+}

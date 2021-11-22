@@ -38,6 +38,7 @@ namespace CAFFAdapterClient.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetUserInfoViewModel>> GetUserInfo(int id)
         {
@@ -47,8 +48,8 @@ namespace CAFFAdapterClient.Controllers
 
         [HttpPatch("{id}")]
         public async Task<IActionResult> EditUser(int id, [FromBody] JsonPatchDocument<EditUserDto> editUserDto)
-        {
-            //await _accountService.EditUserAsync(id, editUserDto);
+        {            
+            await _accountService.EditUserAsync(id, editUserDto);
             return Ok();
         }
 

@@ -2,8 +2,11 @@
 {
     public static class AppClaimTypes
     {
-        public const string UserId = "http://schemas.xmlsoap.org/ws/2009/09/claims/userid";
-        public const string Name = "http://schemas.xmlsoap.org/ws/2009/09/claims/name";
+        public const string UserId = "userid";
+        public const string FirstName = "firstName";
+        public const string Lastname = "lastName";
+        public const string Email = "email";
         public const string Role = "http://schemas.xmlsoap.org/ws/2009/09/claims/role";
+        //public const string Role = "role";
     }
 }
