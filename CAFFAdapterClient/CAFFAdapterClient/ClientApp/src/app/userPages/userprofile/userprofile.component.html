@@ -20,11 +20,16 @@
         <ng-container *ngFor="let gif of gifs">
             <div class="gif_container">
                 <div class="description">                   
-                    <div class="detailes">
+                    <div class="details">
                         <i>{{gif.description}}</i>
-                    </div>                    
+                    </div>   
+                    <div class="edit_button">
+                        <button mat-fab color="primary" (click)="editDescription(gif)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </div>                 
                 </div>
-                <img [src]="gif.file" alt="this slowpoke moves" width="360" />
+                <img [src]="gif.file" alt="this slowpoke moves" width="360px" />
                 <div class="content">
                     <div class="button_container">
                         <button mat-button color="primary" (click)="seeComments()">Comments</button>

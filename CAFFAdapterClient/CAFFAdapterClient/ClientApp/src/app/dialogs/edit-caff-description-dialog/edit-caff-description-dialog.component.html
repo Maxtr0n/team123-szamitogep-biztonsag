@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Edit description</h2>
+<div mat-dialog-content class="form_container">
+    <form [formGroup]="editDescriptionForm" class="form_container">        
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" placeholder="Leave a description" rows="4"></textarea>
+        </mat-form-field>        
+    </form>   
+</div>
+<div mat-dialog-actions class="button_container">
+  <button mat-raised-button color="secondary" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="editDescriptionForm.invalid">Save</button>
+</div>

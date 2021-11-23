@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    padding-bottom: 20px;
 }
 
 .data_container {
@@ -47,8 +48,36 @@
 }
 
 .gif_container {
+    max-width: 360px;
     display: flex;
     flex-direction: column;    
+}
+
+.gif_container .description {
+    position: relative;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    box-shadow: inset 0 0 2px black;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.gif_container .description .edit_button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    opacity: 0.5;
+}
+
+.gif_container .description .edit_button:hover {
+    opacity: 1.0;
+}
+
+.gif_container .description .details {
+    text-align: justify;
+    margin-right: 10px;
 }
 
 .content {    

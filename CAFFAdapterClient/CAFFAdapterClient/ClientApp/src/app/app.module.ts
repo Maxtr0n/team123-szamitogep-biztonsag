@@ -42,6 +42,7 @@ import { DownloadCaffDialogComponent } from './dialogs/download-caff-dialog/down
 import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component';
 import { DeleteUserDialogComponent } from './dialogs/delete-user-dialog/delete-user-dialog.component';
 import { LoadingComponent } from './loading/loading/loading.component';
+import { EditCaffDescriptionDialogComponent } from './dialogs/edit-caff-description-dialog/edit-caff-description-dialog.component';
 
 @NgModule({
     declarations: [
@@ -63,7 +64,8 @@ import { LoadingComponent } from './loading/loading/loading.component';
         DownloadCaffDialogComponent,
         EditProfileDialogComponent,
         DeleteUserDialogComponent,
-        LoadingComponent
+        LoadingComponent,        
+        EditCaffDescriptionDialogComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -109,7 +111,8 @@ import { LoadingComponent } from './loading/loading/loading.component';
         DeleteCaffDialogComponent,
         DownloadCaffDialogComponent,
         EditProfileDialogComponent,
-        DeleteUserDialogComponent
+        DeleteUserDialogComponent,
+        EditCaffDescriptionDialogComponent
     ],
 })
 export class AppModule { }

@@ -22,13 +22,6 @@ export class UserService {
     return this.http.get(EndPoint.BASE_URL + '/gif').toPromise();
   }
 
-  decodeToken() {
-    var tokenInfo = new AccessJWTToken();
-    var token = sessionStorage.getItem(SessionData.TOKEN);
-    tokenInfo = jwt_decode(token);    
-    return tokenInfo;     
-  }
-
   editProfile(data: EditProfileDialogData) {
     var jsonPatchDocument = [
       {    

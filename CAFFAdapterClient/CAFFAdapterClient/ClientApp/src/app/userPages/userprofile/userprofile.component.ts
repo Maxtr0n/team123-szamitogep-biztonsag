@@ -20,6 +20,8 @@ import { CaffFileService } from 'src/app/services/caff-file.service';
 import { UserInfo } from 'src/app/entities/user/UserInfo';
 import { ReqisterResponseErrorData } from 'src/app/entities/register/RegisterResponseErrorData';
 import { UserProfileResponse } from 'src/app/entities/UserProfileResponse';
+import { EditDescriptionDialogData } from 'src/app/entities/dialogData/EditDescriptionDialogData';
+import { EditCaffDescriptionDialogComponent } from 'src/app/dialogs/edit-caff-description-dialog/edit-caff-description-dialog.component';
 
 @Component({
   selector: 'app-userprofile',
@@ -108,6 +110,19 @@ export class UserprofileComponent implements OnInit {
     });
   }
 
+  editDescription(gif: GifResponse) {  
+    const dialogConfig = this.setEditDescriptionDialogConfigs(gif);
+    const dialogRef = this.dialog.open(
+      EditCaffDescriptionDialogComponent,
+      dialogConfig
+    );
+    dialogRef.afterClosed().subscribe((data: EditDescriptionDialogData) => {
+      if (data) {
+        console.log(data.description);
+      }      
+    });
+  }
+
   uploadCaffFile() {
     const dialogConfig = this.setUploadImageDialogConfigs();
     const dialogRef = this.dialog.open(
@@ -146,6 +161,15 @@ export class UserprofileComponent implements OnInit {
       CommentsDialogComponent,
       dialogConfig
     );
+  }
+
+  setEditDescriptionDialogConfigs(gif: GifResponse) {
+    const dialogConfig = this.setCommonConfig('550px');
+    var dialogData = new EditDescriptionDialogData();
+    dialogData.description = gif.description;
+    dialogConfig.data = dialogData;
+    
+    return dialogConfig;
   }
 
   setEditProfileConfigs() {
