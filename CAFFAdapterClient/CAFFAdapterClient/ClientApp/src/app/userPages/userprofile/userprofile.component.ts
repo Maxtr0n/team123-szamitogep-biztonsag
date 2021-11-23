@@ -18,6 +18,8 @@ import { EditProfileDialogData } from 'src/app/entities/EditProfileDialogData';
 import { EditProfileDialogComponent } from 'src/app/dialogs/edit-profile-dialog/edit-profile-dialog.component';
 import { CaffFileService } from 'src/app/services/caff-file.service';
 import { UserInfo } from 'src/app/entities/user/UserInfo';
+import { ReqisterResponseErrorData } from 'src/app/entities/register/RegisterResponseErrorData';
+import { UserProfileResponse } from 'src/app/entities/UserProfileResponse';
 
 @Component({
   selector: 'app-userprofile',
@@ -49,11 +51,19 @@ export class UserprofileComponent implements OnInit {
     this.loadUserInfo();
   }
 
-  loadUserInfo() {
-    var token = this.userService.decodeToken();
-    this.firstname = token.firstName;
-    this.lastname = token.lastName;
-    this.email = token.email;
+  loadUserInfo() {        
+    this.userService.getProfileData().then(
+      success => {        
+        var response = success as UserProfileResponse;
+        this.firstname = response.firstname;
+        this.lastname = response.lastname;
+        this.email = response.email;
+      },
+      error => {
+        var response = error as ReqisterResponseErrorData;
+        this.showError(response.error);
+      }
+    )
   }
 
   editProfile() {
@@ -62,8 +72,18 @@ export class UserprofileComponent implements OnInit {
       EditProfileDialogComponent,
       dialogConfig
     );
-    dialogRef.afterClosed().subscribe((data: EditProfileDialogData) => {
-      console.log(data);
+    dialogRef.afterClosed().subscribe((data: EditProfileDialogData) => {      
+      if (data) {
+        this.userService.editProfile(data).then(
+          success => {
+            this.showSuccess('Profile data has successfully changed.');
+            this.loadUserInfo();
+          },
+          err => {
+            var response = err as ReqisterResponseErrorData;
+            this.showError(response.error);
+          });
+      }     
     });
   }
 
@@ -75,8 +95,15 @@ export class UserprofileComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result: ChangePasswordDialogData) => {
       if (result) {
-        console.log(result.oldPassword);
-        console.log(result.newPassword);
+        this.userService.changePassword(result).then(
+          success => {
+            this.showSuccess('Password has been changed successfully.');
+          },
+          error => {            
+            var response = error.error as ReqisterResponseErrorData;            
+            this.showError(response.error);
+          }
+        )
       }      
     });
   }
@@ -103,6 +130,14 @@ export class UserprofileComponent implements OnInit {
 
   showDownloadInfo() {
     this.toast.info('Download has been started.', 'Info');
+  }
+
+  showSuccess(message: string) {
+    this.toast.success(message, 'Success');
+  }
+
+  showError(message: string) {
+    this.toast.error(message, 'Error');
   }
 
   async seeComments() {

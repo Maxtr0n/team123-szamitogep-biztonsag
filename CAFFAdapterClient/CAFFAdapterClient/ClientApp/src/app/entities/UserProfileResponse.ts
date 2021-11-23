@@ -1,5 +1,5 @@
 export class UserProfileResponse {
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
     email: string;
 }

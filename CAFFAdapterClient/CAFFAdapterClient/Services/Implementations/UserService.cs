@@ -5,6 +5,7 @@ using CAFFAdapterClient.Framework.Providers;
 using CAFFAdapterClient.Infrastructure.Constants;
 using CAFFAdapterClient.Infrastructure.Data;
 using CAFFAdapterClient.Infrastructure.Exceptions;
+using CAFFAdapterClient.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,24 @@ namespace CAFFAdapterClient.Services
             _userManager = userManager;
             _mapper = mapper;
         }
-       
+
+        public async Task<GetUserInfoViewModel> GetUserInfoAsync(int id)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
+
+            if (user == null)
+            {
+                throw new DataNotFoundException("User not found with the given Id.");
+            }
+
+            return new GetUserInfoViewModel()
+            {
+                Firstname = user.FirstName,
+                Lastname = user.Lastname,
+                Email = user.Email
+            };
+        }
+
         public async Task EditUserAsync(int userId, JsonPatchDocument<EditUserDto> editUserDto)
         {
             var user = await CheckUserId(userId);

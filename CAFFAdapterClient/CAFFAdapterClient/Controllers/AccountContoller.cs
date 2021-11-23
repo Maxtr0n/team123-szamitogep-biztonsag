@@ -38,7 +38,6 @@ namespace CAFFAdapterClient.Controllers
             return Ok(result);
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetUserInfoViewModel>> GetUserInfo(int id)
         {
