@@ -54,5 +54,5 @@ jobs:
       shell: pwsh
       run: |
         .\.sonar\scanner\dotnet-sonarscanner begin /k:"Maxtr0n_team123-szamitogep-biztonsag" /o:"maxtr0n" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-        dotnet clean .\CAFFAdapterClient\CAFFAdapterClient.sln
+        dotnet build .\CAFFAdapterClient\CAFFAdapterClient.sln
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
