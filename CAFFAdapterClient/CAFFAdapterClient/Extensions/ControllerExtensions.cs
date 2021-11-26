@@ -5,14 +5,10 @@ namespace CAFFAdapterClient.Extensions
 {
     public static class ControllerExtensions
     {
-        public static FileStreamResult ToFile(this byte[] file)
+        public static FileStreamResult ToFile(this byte[] file, string contentType)
         {
-            using (MemoryStream pdfStream = new MemoryStream())
-            {
-                pdfStream.Write(file, 0, file.Length);
-                pdfStream.Position = 0;
-                return new FileStreamResult(pdfStream, "application/pdf");
-            }
+            var stream = new MemoryStream(file);
+            return new FileStreamResult(stream, contentType);
         }
     }
 }

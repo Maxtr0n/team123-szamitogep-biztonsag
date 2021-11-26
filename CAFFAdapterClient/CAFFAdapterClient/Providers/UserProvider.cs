@@ -1,4 +1,5 @@
-﻿using CAFFAdapterClient.Framework.Providers;
+﻿using CAFFAdapterClient.Domain.Enums;
+using CAFFAdapterClient.Framework.Providers;
 using CAFFAdapterClient.Infrastructure.Constants;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -30,5 +31,20 @@ namespace CAFFAdapterClient.Providers
             return null;
         }
 
+        public UserRoles? GetUserRole()
+        {
+            if (_httpContextAccessor != null && _httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.User != null)
+            {
+                var userClaim = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(i => i.Type == AppClaimTypes.Role);
+                if (userClaim == null)
+                {
+                    return null;
+                }
+
+                return Enum.Parse<UserRoles>(userClaim.Value, true);
+            }
+
+            return null;
+        }
     }
 }

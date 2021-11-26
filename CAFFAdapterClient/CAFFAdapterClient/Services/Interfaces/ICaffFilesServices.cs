@@ -11,9 +11,11 @@ namespace CAFFAdapterClient.Services
         Task<TableViewModel<CaffFileRowViewModel>> GetAsync();
         Task<ActionResult<CaffFileViewModel>> GetByIdAsync(int id);
         Task DeleteByIdAsync(int id);
-        Task CreateAsync(CreateCaffFileDto dto);
+        Task<int> CreateAsync(CreateCaffFileDto dto);
         Task UpdateAsync(int id, UpdateCaffFileDto dto);
         Task<byte[]> GetPreviewByIdAsync(int id);
         Task<byte[]> GetFileByIdAsync(int id);
+        Task AddCommentAsync(int caddId, AddComment dto);
+        Task DeleteCommentByIdAsync(int id, int cid);
     }
 }

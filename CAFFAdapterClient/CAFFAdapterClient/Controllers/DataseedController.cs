@@ -8,9 +8,9 @@ namespace CAFFAdapterClient.Controllers
     [Route("[controller]")]
     public class DataseedController : ControllerBase
     {
-        private readonly IDataseedService _dataseedService;
+        private readonly IDataSeedService _dataseedService;
 
-        public DataseedController(IDataseedService dataseedService)
+        public DataseedController(IDataSeedService dataseedService)
         {
             _dataseedService = dataseedService;
         }

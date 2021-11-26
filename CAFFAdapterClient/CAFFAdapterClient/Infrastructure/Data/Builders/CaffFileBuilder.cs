@@ -7,9 +7,6 @@ namespace CAFFAdapterClient.Infrastructure.Data.Builders
     {
         public CaffFileBuilder(ModelBuilder builder) : base(builder)
         {
-            //entityBuilder.Property(i => i.Name)
-            //    .HasMaxLength(255)
-            //    .IsRequired();
         }
     }
 }

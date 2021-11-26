@@ -6,6 +6,7 @@ using CAFFAdapterClient.Infrastructure.Constants;
 using CAFFAdapterClient.Infrastructure.Data;
 using CAFFAdapterClient.Infrastructure.Exceptions;
 using CAFFAdapterClient.ViewModels.Account;
+using CAFFAdapterClient.ViewModels.CaffFiles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -20,15 +21,18 @@ namespace CAFFAdapterClient.Services
         private readonly AppModelDbContext _dbContext;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly IUserProvider _userProvider;
 
         public UserService(
             AppModelDbContext dbContext,
             UserManager<User> userManager,
-            IMapper mapper)
+            IMapper mapper,
+            IUserProvider userProvider)
         {
             _dbContext = dbContext;
             _userManager = userManager;
             _mapper = mapper;
+            _userProvider = userProvider;
         }
 
         public async Task<GetUserInfoViewModel> GetUserInfoAsync(int id)
@@ -40,11 +44,21 @@ namespace CAFFAdapterClient.Services
                 throw new DataNotFoundException("User not found with the given Id.");
             }
 
+            var caffFiles = await _dbContext.CaffFiles
+               .AsNoTracking()
+               .Where(x => x.UserId == _userProvider.GetUserId())
+               .Select(x => new CaffFileRowViewModel
+               {
+                   Id = x.Id
+               })
+               .ToListAsync();
+
             return new GetUserInfoViewModel()
             {
                 Firstname = user.FirstName,
                 Lastname = user.Lastname,
-                Email = user.Email
+                Email = user.Email,
+                CaffFiles = caffFiles
             };
         }
 

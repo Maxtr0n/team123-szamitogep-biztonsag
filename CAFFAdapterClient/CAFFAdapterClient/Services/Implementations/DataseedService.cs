@@ -7,17 +7,20 @@ using System.Threading.Tasks;
 
 namespace CAFFAdapterClient.Services.Implementations
 {
-    public class DataseedService : IDataseedService
+    public class DataSeedService : IDataSeedService
     {
         private readonly AppModelDbContext _dbContext;
         private readonly UserManager<User> _userManager;
+        private readonly ICaffFilesServices _caffFilesServices;
 
-        public DataseedService(
+        public DataSeedService(
             AppModelDbContext dbContext,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            ICaffFilesServices caffFilesServices)
         {
             _dbContext = dbContext;
             _userManager = userManager;
+            _caffFilesServices = caffFilesServices;
         }
 
         public async Task SeedAsync()
@@ -39,6 +42,22 @@ namespace CAFFAdapterClient.Services.Implementations
                 FirstName = "Joseph",
                 Lastname = "McAllsiter",
             }, "Username9!");
+
+            for (int i = 0; i < 10; i++)
+            {
+                var caffId = await _caffFilesServices.CreateAsync(new DataTransferObjects.CaffFiles.CreateCaffFileDto()
+                {
+                    File = null                    
+                });
+
+                for (int j = 0; j < 3; j++)
+                {
+                    await _caffFilesServices.AddCommentAsync(caffId, new DataTransferObjects.CaffFiles.AddComment()
+                    {
+                        Message = $"#{j} example comment"
+                    });
+                }
+            }
         }
     }
 }

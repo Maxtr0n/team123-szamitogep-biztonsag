@@ -2,7 +2,7 @@
 
 namespace CAFFAdapterClient.Services.Interfaces
 {
-    public interface IDataseedService
+    public interface IDataSeedService
     {
         Task SeedAsync();
     }

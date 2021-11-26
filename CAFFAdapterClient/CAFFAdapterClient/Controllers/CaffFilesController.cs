@@ -33,18 +33,34 @@ namespace CAFFAdapterClient.Controllers
             return await _caffFilesServices.GetByIdAsync(id);
         }
 
+        [HttpPost("{id}/comments")]
+        public async Task<ActionResult<CaffFileViewModel>> CreateCommentAsync(int id, AddComment dto)
+        {
+            await _caffFilesServices.AddCommentAsync(id, dto);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}/comments/{cid}")]
+        public async Task<ActionResult<CaffFileViewModel>> DeleteCommentByIdAsync(int id, int cid)
+        {
+            await _caffFilesServices.DeleteCommentByIdAsync(id, cid);
+
+            return Ok();
+        }
+
         [HttpGet("{id}/preview")]
         public async Task<FileStreamResult> GetPreviewByIdAsync(int id)
         {
             var result = await _caffFilesServices.GetPreviewByIdAsync(id);
-            return result.ToFile();
+            return result.ToFile("image/gif");
         }
 
         [HttpGet("{id}/download")]
         public async Task<FileStreamResult> DownloadByIdAsync(int id)
         {
             var result = await _caffFilesServices.GetFileByIdAsync(id);
-            return result.ToFile();
+            return result.ToFile("application/octet-stream");
         }
 
         [HttpPost]

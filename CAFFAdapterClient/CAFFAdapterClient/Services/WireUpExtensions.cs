@@ -10,7 +10,7 @@ namespace CAFFAdapterClient.Services
         {
             services.AddAutoMapper(typeof(WireUpExtensions));
 
-            services.AddScoped<IDataseedService, DataseedService>();
+            services.AddScoped<IDataSeedService, DataSeedService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICaffFilesServices, CaffFilesServices>();
             services.AddScoped<IUserService, UserService>();
