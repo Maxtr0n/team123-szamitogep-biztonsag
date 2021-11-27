@@ -31,7 +31,7 @@ namespace CAFFAdapterClient.Services.Implementations
                 Email = "admin@example.com",
                 UserName = "admin",
                 FirstName = "John",
-                Lastname = "Admin",
+                LastName = "Admin",
             }, "Admin123.");
 
             var userResult = await _userManager.CreateAsync(new User()
@@ -40,7 +40,7 @@ namespace CAFFAdapterClient.Services.Implementations
                 Email = "test@test.com",
                 UserName = "user",
                 FirstName = "Joseph",
-                Lastname = "McAllsiter",
+                LastName = "McAllsiter",
             }, "Username9!");
 
             for (int i = 0; i < 10; i++)

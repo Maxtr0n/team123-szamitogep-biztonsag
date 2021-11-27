@@ -61,7 +61,7 @@ namespace CAFFAdapterClient.Services
             var claims = new List<Claim>();
             claims.Add(new Claim(AppClaimTypes.UserId, user.Id.ToString()));
             claims.Add(new Claim(AppClaimTypes.FirstName, user.FirstName));
-            claims.Add(new Claim(AppClaimTypes.Lastname, user.Lastname));
+            claims.Add(new Claim(AppClaimTypes.Lastname, user.LastName));
             claims.Add(new Claim(AppClaimTypes.Email, user.Email));
             claims.Add(new Claim(AppClaimTypes.Role, user.Role.ToString()));
 
@@ -88,7 +88,7 @@ namespace CAFFAdapterClient.Services
             var identityResult = await _userManager.CreateAsync(new User()
             {
                 FirstName = registerUserDto.FirstName,
-                Lastname = registerUserDto.LastName,
+                LastName = registerUserDto.LastName,
                 Role = UserRoles.Standard,
                 Email = registerUserDto.Email,
                 UserName = Guid.NewGuid().ToString(),
@@ -112,7 +112,7 @@ namespace CAFFAdapterClient.Services
             return new GetUserInfoViewModel()
             {
                 Firstname = user.FirstName,
-                Lastname = user.Lastname,
+                Lastname = user.LastName,
                 Email = user.Email
             };
         }

@@ -56,7 +56,7 @@ namespace CAFFAdapterClient.Services
             return new GetUserInfoViewModel()
             {
                 Firstname = user.FirstName,
-                Lastname = user.Lastname,
+                Lastname = user.LastName,
                 Email = user.Email,
                 CaffFiles = caffFiles
             };
