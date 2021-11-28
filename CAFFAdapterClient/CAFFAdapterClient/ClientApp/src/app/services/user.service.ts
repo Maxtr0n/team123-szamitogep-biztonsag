@@ -6,6 +6,7 @@ import { SessionData } from './sessionData';
 import jwt_decode  from 'jwt-decode';
 import { EditProfileDialogData } from '../entities/EditProfileDialogData';
 import { ChangePasswordDialogData } from '../entities/ChangePasswordDialogData';
+import { GetGifContainerResponse } from '../entities/gif/GetGifContainerResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,18 @@ export class UserService {
 
   getGifs() {
     return this.http.get(EndPoint.BASE_URL + '/gif').toPromise();
+  }
+
+  getGifVersion2() {
+    return this.http.get('https://localhost:44343/CaffFiles/1/preview', { responseType: 'blob' }).toPromise();
+  }
+
+  getGifsByUser() {
+    return this.http.get<GetGifContainerResponse>(EndPoint.BASE_URL_2 + '/getGifsByUserId').toPromise();
+  }
+
+  getAllGifs() {
+    return this.http.get<GetGifContainerResponse>(EndPoint.BASE_URL_2 + '/getAllGifs').toPromise();
   }
 
   editProfile(data: EditProfileDialogData) {

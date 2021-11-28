@@ -22,6 +22,8 @@ import { ReqisterResponseErrorData } from 'src/app/entities/register/RegisterRes
 import { UserProfileResponse } from 'src/app/entities/UserProfileResponse';
 import { EditDescriptionDialogData } from 'src/app/entities/dialogData/EditDescriptionDialogData';
 import { EditCaffDescriptionDialogComponent } from 'src/app/dialogs/edit-caff-description-dialog/edit-caff-description-dialog.component';
+import { CssSelector } from '@angular/compiler';
+import { GetGifResponse } from 'src/app/entities/gif/GetGifResponse';
 
 @Component({
   selector: 'app-userprofile',
@@ -35,6 +37,7 @@ export class UserprofileComponent implements OnInit {
   lastname: string = '';
   email:string = '';  
   gifs: GifResponse[] = [];
+  gifContainer: GetGifResponse[];
 
   constructor(private dialog: MatDialog, 
     private userService: UserService, 
@@ -42,15 +45,48 @@ export class UserprofileComponent implements OnInit {
     private toast: ToastrService) { }
 
   ngOnInit() {   
-    this.userService.getGifs().then(response => {
-      var gif = response as GifResponse;      
-      this.base64gif = gif.file;
-      for (var i = 0; i < 6; i++) {
-        this.gifs.push(gif);
+
+    // this.userService.getGifs().then(response => {
+    //   var gif = response as GifResponse;      
+    //   this.base64gif = gif.file;
+    //   for (var i = 0; i < 6; i++) {
+    //     this.gifs.push(gif);
+    //   }
+    //   this.isLoading = false;
+    // });
+
+    // this.userService.getGifVersion2().then((response: Blob) => {
+    //   console.log('VÁLASZ');
+    //   console.log(response);
+    //   console.log('BASE64:');   
+    //   this.createImageFromBlob(response);
+    //   this.isLoading = false;
+    // });
+
+    this.userService.getGifsByUser().then(
+      response => {
+        this.gifContainer = response.items;
+        this.isLoading = false;
+      },
+      error => {
+
       }
-      this.isLoading = false;
-    });
+    )
+
     this.loadUserInfo();
+  }
+
+  createImageFromBlob(image: Blob) {
+    let reader = new FileReader();
+    reader.addEventListener("load", () => {
+      var gifResponse = new GifResponse();
+      gifResponse.file = reader.result as string;
+      this.gifs.push(gifResponse);
+    }, false);
+ 
+    if (image) {
+       reader.readAsDataURL(image);
+    }
   }
 
   loadUserInfo() {        
@@ -155,8 +191,8 @@ export class UserprofileComponent implements OnInit {
     this.toast.error(message, 'Error');
   }
 
-  async seeComments() {
-    const dialogConfig = await this.setSeeCommentsDialogConfigs();
+  async seeComments(gifId: number) {
+    const dialogConfig = await this.setSeeCommentsDialogConfigs(gifId);
     const dialogRef = this.dialog.open(
       CommentsDialogComponent,
       dialogConfig
@@ -206,16 +242,31 @@ export class UserprofileComponent implements OnInit {
     return dialogConfig;
   }
 
-  async setSeeCommentsDialogConfigs() {
+  async setSeeCommentsDialogConfigs(gifId: number) {
     const dialogConfig = this.setCommonConfig('550px');
-    await this.commentService.getCommentsForGif('1').then(response => {
-      var responseEntity = response as CommentData[];     
-      console.log(responseEntity); 
-      var dialogData = new CommentsDialogData();
-      dialogData.comments = responseEntity;
-      dialogData.newComment = '';
-      dialogConfig.data = dialogData;            
-    });    
+
+    // await this.commentService.getCommentsForGif('1').then(response => {
+    //   var responseEntity = response as CommentData[];     
+    //   console.log(responseEntity); 
+    //   var dialogData = new CommentsDialogData();
+    //   dialogData.comments = responseEntity;
+    //   dialogData.newComment = '';
+    //   dialogConfig.data = dialogData;            
+    // });    
+    
+    await this.commentService.getCommentsByGifId(gifId).then(
+      response => {
+        console.log(response);
+        var dialogData = new CommentsDialogData();
+        dialogData.comments = response.items;
+        dialogData.newComment = '';
+        dialogConfig.data = dialogData; 
+      },
+      error => {
+
+      }
+    )
+
     return dialogConfig;
   }
 

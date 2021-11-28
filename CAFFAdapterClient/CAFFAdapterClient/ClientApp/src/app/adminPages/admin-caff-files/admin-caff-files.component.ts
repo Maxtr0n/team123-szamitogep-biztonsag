@@ -52,13 +52,13 @@ export class AdminCaffFilesComponent implements OnInit {
         this.toast.info('Download has been started.', 'Info');
     }
 
-    async seeComments() {
-        const dialogConfig = await this.setSeeCommentsDialogConfigs();
+    async seeComments(gifId: number) {
+        const dialogConfig = await this.setSeeCommentsDialogConfigs(gifId);
         const dialogRef = this.dialog.open(
-            CommentsDialogComponent,
-            dialogConfig
+          CommentsDialogComponent,
+          dialogConfig
         );
-    }
+      }
 
     setDeleteCaffDialogConfigs() {
         const dialogConfig = this.setCommonConfig('450px');
@@ -68,18 +68,24 @@ export class AdminCaffFilesComponent implements OnInit {
         return dialogConfig;
     }
 
-    async setSeeCommentsDialogConfigs() {
-        const dialogConfig = this.setCommonConfig('550px');
-        await this.commentService.getCommentsForGif('1').then(response => {
-            var responseEntity = response as CommentData[];
-            console.log(responseEntity);
+    async setSeeCommentsDialogConfigs(gifId: number) {
+        const dialogConfig = this.setCommonConfig('550px');     
+        
+        await this.commentService.getCommentsByGifId(gifId).then(
+          response => {
+            console.log(response);
             var dialogData = new CommentsDialogData();
-            dialogData.comments = responseEntity;
+            dialogData.comments = response.items;
             dialogData.newComment = '';
-            dialogConfig.data = dialogData;
-        });
+            dialogConfig.data = dialogData; 
+          },
+          error => {
+    
+          }
+        )
+    
         return dialogConfig;
-    }
+      }
 
     setCommonConfig(width) {
         const dialogConfig = new MatDialogConfig();

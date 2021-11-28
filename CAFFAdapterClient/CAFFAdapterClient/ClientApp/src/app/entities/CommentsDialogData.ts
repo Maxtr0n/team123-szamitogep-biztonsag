@@ -1,6 +1,6 @@
-import { CommentData } from "./CommentData";
+import { GetCommentResponse } from "./comment/GetCommentResponse";
 
 export class CommentsDialogData {
-    comments: CommentData[];
+    comments: GetCommentResponse[];
     newComment: string;
 }
