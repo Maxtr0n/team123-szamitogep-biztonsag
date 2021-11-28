@@ -253,8 +253,7 @@ export class UserprofileComponent implements OnInit {
     //   dialogData.newComment = '';
     //   dialogConfig.data = dialogData;            
     // });    
-
-    console.log('ITTEN');
+    
     await this.commentService.getCommentsByGifId(gifId).then(
       response => {
         console.log(response);

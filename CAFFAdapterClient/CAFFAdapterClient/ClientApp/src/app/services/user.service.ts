@@ -31,6 +31,10 @@ export class UserService {
     return this.http.get<GetGifContainerResponse>(EndPoint.BASE_URL_2 + '/getGifsByUserId').toPromise();
   }
 
+  getAllGifs() {
+    return this.http.get<GetGifContainerResponse>(EndPoint.BASE_URL_2 + '/getAllGifs').toPromise();
+  }
+
   editProfile(data: EditProfileDialogData) {
     var jsonPatchDocument = [
       {    

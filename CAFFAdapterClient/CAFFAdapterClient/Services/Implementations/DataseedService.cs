@@ -120,8 +120,7 @@ namespace CAFFAdapterClient.Services.Implementations
                 Email = "test" + idx + "@test.com",
                 UserName = "user" + idx,
                 FirstName = Faker.Name.First(),
-                LastName = lastname,
-                Lastname = lastname
+                LastName = lastname,                
             };
         }
 
@@ -136,8 +135,7 @@ namespace CAFFAdapterClient.Services.Implementations
                 Email = "admin" + idx + "@example.com",
                 UserName = "admin" + idx,
                 FirstName = Faker.Name.First(),
-                LastName = lastname,
-                Lastname = lastname
+                LastName = lastname                
             };
         }
 
