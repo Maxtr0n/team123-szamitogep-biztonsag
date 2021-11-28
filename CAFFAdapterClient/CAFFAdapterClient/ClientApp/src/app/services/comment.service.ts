@@ -16,11 +16,18 @@ export class CommentService {
     return this.http.get(this.url + '?gifId=' + gifId).toPromise();
   }
 
-  addCommentForGif(difId: string, comment: string) {
-    var userId = '';
+  addCommentForGif(gifId: number, comment: string) {
+    var requestBody = {
+      message: comment
+    };
+    return this.http.post(EndPoint.BASE_URL_2 + '/CaffFiles/' + gifId + '/comments', requestBody).toPromise();
   }
 
   getCommentsByGifId(gifId: number) {
     return this.http.get<GetCommentContainerResponse>(EndPoint.BASE_URL_2 + '/CaffFiles/getCommentsByGifId/' + gifId).toPromise();
+  }
+
+  deleteComment(commentId: number) {
+    return this.http.delete(EndPoint.BASE_URL_2 + '/user' + '/deleteComment/' + commentId).toPromise();
   }
 }

@@ -17,9 +17,12 @@
   <ng-container *ngIf="this.data.comments.length > 0">
     <div class="comment_container">
       <ng-container *ngFor="let comment of this.data.comments">
-        <div class="com_con">
-          <strong>{{comment.username}}</strong><br/>
-          {{comment.comment}}
+        <div class="com_con">          
+          <div class="content">
+            <strong>{{comment.username}}</strong><br/>
+            <button mat-icon-button *ngIf="comment.userId == userId" (click)="deleteComment(comment.commentId)"><mat-icon>delete</mat-icon></button>
+          </div>      
+          {{comment.comment}} 
         </div>    
       </ng-container>
     </div>

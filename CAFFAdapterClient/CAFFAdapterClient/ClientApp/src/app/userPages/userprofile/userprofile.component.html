@@ -16,15 +16,18 @@
     <div style="width: 100%;">
         <app-loading [isLoading]="isLoading"></app-loading>
     </div>    
-    <div class="gif">        
-        <ng-container *ngFor="let gif of gifContainer">
-            <div class="gif_container">
+    <div class="gif">      
+        <div class="nogifs" *ngIf="gifContainer.length == 0 && isLoading == false">
+            <i>No gifs to display.</i>
+        </div>  
+        <ng-container *ngFor="let gif of gifContainer">            
+            <div class="gif_container" *ngIf="isLoading == false">
                 <div class="description">                   
                     <div class="details">
                         <i>{{gif.description}}</i>
                     </div>   
                     <div class="edit_button">
-                        <button mat-fab color="primary" (click)="editDescription(gif)">
+                        <button mat-mini-fab color="primary" (click)="editDescription(gif)">
                             <mat-icon>edit</mat-icon>
                         </button>
                     </div>                 
@@ -35,10 +38,10 @@
                         <button mat-button color="primary" (click)="seeComments(gif.id)">Comments</button>
                     </div>
                     <div class="icon_container">
-                        <button mat-icon-button (click)="deleteCaffFile()">
+                        <button mat-icon-button (click)="deleteCaffFile(gif.id)">
                             <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">delete</mat-icon>
                         </button>
-                        <button mat-icon-button (click)="downloadCaffFile()">
+                        <button mat-icon-button (click)="downloadCaffFile(gif.id)">
                             <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">file_download</mat-icon>
                         </button>                        
                     </div>

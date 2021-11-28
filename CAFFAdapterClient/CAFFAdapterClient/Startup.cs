@@ -106,9 +106,10 @@ namespace CAFFAdapterClient
             services.AddScoped<IUserProvider, UserProvider>();
 
             services.AddInfrastructure();
+            services.AddInMemoryDb();
             // dotnet ef migrations add Initial -o Infrastructure/Data/Migrations
             // dotnet ef database update
-            services.AddSqlServer(Configuration.GetConnectionString("Model"));
+            // services.AddSqlServer(Configuration.GetConnectionString("Model"));
             services.AddBusinessLogic();
 
             var config = new MapperConfiguration(c => {

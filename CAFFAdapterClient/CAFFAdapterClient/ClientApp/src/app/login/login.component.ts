@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
     this.showSuccess();
     sessionStorage.setItem(SessionData.USER_LOGGED_IN, 'true');
     sessionStorage.setItem(SessionData.TOKEN, jwtToken);
+    sessionStorage.setItem(SessionData.USER_ID, this.authService.getUserIdFromToken());
     this.authService.userLoggedin();
     this.router.navigate(['user/home']);
   }

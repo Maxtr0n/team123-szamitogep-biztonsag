@@ -5,7 +5,7 @@ import { CommentsDialogComponent } from 'src/app/dialogs/comments-dialog/comment
 import { DeleteCaffDialogComponent } from 'src/app/dialogs/delete-caff-dialog/delete-caff-dialog.component';
 import { CommentData } from 'src/app/entities/CommentData';
 import { CommentsDialogData } from 'src/app/entities/CommentsDialogData';
-import { DeleteCaffDialogData } from 'src/app/entities/DeleteCaffDialogData';
+import { DeleteDialogData } from 'src/app/entities/DeleteCaffDialogData';
 import { GifResponse } from 'src/app/entities/GifResponse';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommentService } from 'src/app/services/comment.service';
@@ -62,7 +62,7 @@ export class AdminCaffFilesComponent implements OnInit {
 
     setDeleteCaffDialogConfigs() {
         const dialogConfig = this.setCommonConfig('450px');
-        var dialogData = new DeleteCaffDialogData();
+        var dialogData = new DeleteDialogData();
         dialogConfig.data = dialogData;
 
         return dialogConfig;

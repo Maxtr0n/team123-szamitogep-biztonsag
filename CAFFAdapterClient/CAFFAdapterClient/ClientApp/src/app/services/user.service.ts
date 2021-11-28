@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AccessJWTToken } from '../entities/login/AccessJWTToken';
 import { EndPoint } from './endpoints';
-import { SessionData } from './sessionData';
-import jwt_decode  from 'jwt-decode';
+
 import { EditProfileDialogData } from '../entities/EditProfileDialogData';
 import { ChangePasswordDialogData } from '../entities/ChangePasswordDialogData';
 import { GetGifContainerResponse } from '../entities/gif/GetGifContainerResponse';
@@ -33,7 +31,7 @@ export class UserService {
 
   getAllGifs() {
     return this.http.get<GetGifContainerResponse>(EndPoint.BASE_URL_2 + '/getAllGifs').toPromise();
-  }
+  }  
 
   editProfile(data: EditProfileDialogData) {
     var jsonPatchDocument = [
