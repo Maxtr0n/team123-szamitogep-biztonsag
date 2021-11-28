@@ -61,6 +61,8 @@ namespace CAFFAdapterClient.Services
             return new CaffFileViewModel
             {
                 Description = caff.Description,
+                CreatedAt = caff.CreatedAt,
+                Metadata = caff.Metadata,
                 Comments = caff.Comments.Select(x => new CommentViewModel
                 {
                     Id = x.Id,
@@ -141,7 +143,8 @@ namespace CAFFAdapterClient.Services
                 File = dto.File,
                 Preview = preview,
                 UserId = _userProvider.GetUserId(),
-                Metadata = json
+                Metadata = json,
+                CreatedAt = DateTime.UtcNow
             };
 
             _dbContext.CaffFiles.Add(caff);
