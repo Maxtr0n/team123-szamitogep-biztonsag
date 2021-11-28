@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { GetCommentContainerResponse } from '../entities/comment/GetCommentContainerResponse';
 import { EndPoint } from './endpoints';
 
 @Injectable({
@@ -17,5 +18,9 @@ export class CommentService {
 
   addCommentForGif(difId: string, comment: string) {
     var userId = '';
+  }
+
+  getCommentsByGifId(gifId: number) {
+    return this.http.get<GetCommentContainerResponse>(EndPoint.BASE_URL_2 + '/CaffFiles/getCommentsByGifId/' + gifId).toPromise();
   }
 }

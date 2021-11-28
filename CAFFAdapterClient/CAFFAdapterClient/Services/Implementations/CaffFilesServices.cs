@@ -1,13 +1,17 @@
 ﻿using CAFFAdapterClient.DataTransferObjects.CaffFiles;
+using CAFFAdapterClient.DataTransferObjects.Comment;
 using CAFFAdapterClient.Domain;
 using CAFFAdapterClient.Framework.Providers;
 using CAFFAdapterClient.Infrastructure.Data;
 using CAFFAdapterClient.Infrastructure.Exceptions;
 using CAFFAdapterClient.ViewModels;
 using CAFFAdapterClient.ViewModels.CaffFiles;
+using CAFFAdapterClient.ViewModels.Comments;
+using CAFFAdapterClient.ViewModels.GifFiles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -160,6 +164,102 @@ namespace CAFFAdapterClient.Services
             comment.IsDeleted = true;
 
             _dbContext.Comments.Update(comment);
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<TableViewModel<GifViewModel>> getGifs(bool byUserId)
+        {
+            List<CaffFile> caffFiles = null;
+            if (byUserId)
+            {
+                caffFiles = _dbContext.CaffFiles
+                .Where(x => x.UserId == _userProvider.GetUserId())
+                .OrderByDescending(x => x.CreatedAt)
+                .ToList();
+            } else
+            {
+                caffFiles = _dbContext.CaffFiles               
+               .OrderByDescending(x => x.CreatedAt)
+               .ToList();
+            }
+           
+            var items = new List<GifViewModel>();
+
+            foreach (var caffFile in caffFiles)
+            {
+                var newGifViewModel = new GifViewModel();
+                newGifViewModel.Id = caffFile.Id;
+                newGifViewModel.Description = caffFile.Description;
+                newGifViewModel.Base64Encode = "data:image/gif;base64," + Convert.ToBase64String(caffFile.Preview);
+                items.Add(newGifViewModel);
+            }
+
+            var tableViewModel = new TableViewModel<GifViewModel>();
+            tableViewModel.Count = items.Count();
+            tableViewModel.Items = items;
+
+            return tableViewModel;
+        }
+
+        public async Task<TableViewModel<CommentByGifViewModel>> getCommentsByGifId(int gifId)
+        {
+            var comments = _dbContext.Comments
+                .Where(x => x.CaffId == gifId)
+                .Include(x => x.User)
+                .OrderByDescending(x => x.CreatedAt)
+                .ToList();
+
+            Console.WriteLine("COUNT: " + comments.Count());
+
+            var items = new List<CommentByGifViewModel>();
+
+            foreach (var comment in comments)
+            {
+                var newCommentViewModel = new CommentByGifViewModel();
+                newCommentViewModel.CommentId = comment.Id;
+                newCommentViewModel.UserId = comment.UserId;
+                newCommentViewModel.Username = comment.User.FirstName + ' ' + comment.User.LastName;
+                newCommentViewModel.Comment = comment.Message;
+                items.Add(newCommentViewModel);
+            }
+
+            var tableViewModel = new TableViewModel<CommentByGifViewModel>();
+            tableViewModel.Count = items.Count();
+            tableViewModel.Items = items;
+
+            return tableViewModel;
+        }
+
+        public async Task<int> createCaffForSeed(CreateCaffSeedDto createCaffSeedDto)
+        {
+            var caff = new CaffFile()
+            {
+                File = createCaffSeedDto.Caff,
+                Preview = createCaffSeedDto.Gif,
+                UserId = createCaffSeedDto.UserId,
+                Description = createCaffSeedDto.Description
+            };
+
+            _dbContext.CaffFiles.Add(caff);
+
+            await _dbContext.SaveChangesAsync();
+
+            return caff.Id;
+        }
+
+        public async Task addCommentForSeed(CommentSeedDto commentSeedDto)
+        {
+            var caff = await _dbContext.CaffFiles.FirstOrDefaultAsync(x => x.Id == commentSeedDto.CaffId)
+                ?? throw new DataNotFoundException();
+
+            _dbContext.Comments.Add(new Comment()
+            {
+                CreatedAt = DateTime.UtcNow,
+                UserId = commentSeedDto.UserId,
+                Message = commentSeedDto.Message,
+                CaffId = commentSeedDto.CaffId
+            });
 
             await _dbContext.SaveChangesAsync();
         }

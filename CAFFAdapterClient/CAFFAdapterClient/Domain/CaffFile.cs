@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CAFFAdapterClient.Domain
 {
@@ -8,7 +9,7 @@ namespace CAFFAdapterClient.Domain
         public byte[] Preview { get; set; }
         public int? UserId { get; set; }
         public string Description { get; set; }
-
+        public DateTime CreatedAt { get; set; }
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

@@ -1,6 +1,9 @@
 ﻿using CAFFAdapterClient.DataTransferObjects.CaffFiles;
+using CAFFAdapterClient.DataTransferObjects.Comment;
 using CAFFAdapterClient.ViewModels;
 using CAFFAdapterClient.ViewModels.CaffFiles;
+using CAFFAdapterClient.ViewModels.Comments;
+using CAFFAdapterClient.ViewModels.GifFiles;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -17,5 +20,11 @@ namespace CAFFAdapterClient.Services
         Task<byte[]> GetFileByIdAsync(int id);
         Task AddCommentAsync(int caddId, AddComment dto);
         Task DeleteCommentByIdAsync(int id, int cid);
+
+
+        Task<TableViewModel<GifViewModel>> getGifs(bool byUserId);
+        Task<TableViewModel<CommentByGifViewModel>> getCommentsByGifId(int gifId);
+        Task<int> createCaffForSeed(CreateCaffSeedDto createCaffSeedDto);
+        Task addCommentForSeed(CommentSeedDto commentSeedDto);
     }
 }
