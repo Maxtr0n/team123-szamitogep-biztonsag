@@ -17,7 +17,7 @@
         <app-loading [isLoading]="isLoading"></app-loading>
     </div>    
     <div class="gif">        
-        <ng-container *ngFor="let gif of gifs">
+        <ng-container *ngFor="let gif of gifContainer">
             <div class="gif_container">
                 <div class="description">                   
                     <div class="details">
@@ -29,10 +29,10 @@
                         </button>
                     </div>                 
                 </div>
-                <img [src]="gif.file" alt="this slowpoke moves" width="360px" />
+                <img [src]="gif.base64Encode" alt="this slowpoke moves" width="360px" />
                 <div class="content">
                     <div class="button_container">
-                        <button mat-button color="primary" (click)="seeComments()">Comments</button>
+                        <button mat-button color="primary" (click)="seeComments(gif.id)">Comments</button>
                     </div>
                     <div class="icon_container">
                         <button mat-icon-button (click)="deleteCaffFile()">
