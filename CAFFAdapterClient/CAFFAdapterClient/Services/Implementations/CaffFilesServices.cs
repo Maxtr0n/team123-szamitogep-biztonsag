@@ -154,6 +154,52 @@ namespace CAFFAdapterClient.Services
             return caff.Id;
         }
 
+        public async Task<byte[]> PreviewAsync(CreateCaffFileDto dto)
+        {
+            var caffName = Guid.NewGuid();
+            var inputPath = $"input-caff-files/{caffName}.caff";
+            var outputPath = $"processed-caff-files/{caffName}";
+
+            if (!Directory.Exists("input-caff-files"))
+            {
+                Directory.CreateDirectory("input-caff-files");
+            }
+            if (!Directory.Exists(outputPath))
+            {
+                Directory.CreateDirectory(outputPath);
+            }
+
+            await File.WriteAllBytesAsync(inputPath, dto.File);
+
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = $@"{Directory.GetCurrentDirectory()}\Parser\caffparser.exe";
+                process.StartInfo.Arguments = $"--if {inputPath} --of {outputPath}/{caffName}";
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+
+                var output = new StringBuilder();
+                var error = new StringBuilder();
+                process.OutputDataReceived += (sender, data) => output.Append("\n" + data.Data);
+                process.ErrorDataReceived += (sender, data) => error.Append("\n" + data.Data);
+
+                var startStatus = process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                await process.WaitForExitAsync();
+
+                if (!output.ToString().Contains("Parsing ended successfully."))
+                {
+                    throw new BusinessLogicException("Nem sikerült a CAFF fájl feltöltése!");
+                }
+            }
+
+            // var preview = new System.Net.WebClient().DownloadData("https://c.tenor.com/eFPFHSN4rJ8AAAAd/example.gif");
+            return await File.ReadAllBytesAsync($"{outputPath}/{caffName}.gif");
+        }
+
         public async Task UpdateAsync(int id, UpdateCaffFileDto dto)
         {
             var caff = await _dbContext.CaffFiles.FirstOrDefaultAsync(x => x.Id == id)

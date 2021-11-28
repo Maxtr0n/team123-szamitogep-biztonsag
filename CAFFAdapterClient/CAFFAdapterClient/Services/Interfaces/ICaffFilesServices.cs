@@ -15,6 +15,7 @@ namespace CAFFAdapterClient.Services
         Task<ActionResult<CaffFileViewModel>> GetByIdAsync(int id);
         Task DeleteByIdAsync(int id);
         Task<int> CreateAsync(CreateCaffFileDto dto);
+        Task<byte[]> PreviewAsync(CreateCaffFileDto dto);
         Task UpdateAsync(int id, UpdateCaffFileDto dto);
         Task<byte[]> GetPreviewByIdAsync(int id);
         Task<byte[]> GetFileByIdAsync(int id);
