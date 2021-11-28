@@ -6,6 +6,7 @@ using CAFFAdapterClient.ViewModels;
 using CAFFAdapterClient.ViewModels.Account;
 using CAFFAdapterClient.ViewModels.CaffFiles;
 using Newtonsoft.Json;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -40,9 +41,10 @@ namespace CAFFAdapterClient.Test
             var token = response.Token;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var file = await File.ReadAllBytesAsync("Inputs/1.caff");
             var content = new StringContent(JsonConvert.SerializeObject(new CreateCaffFileDto
             {
-                File = null
+                File = file
             }), Encoding.UTF8, "application/json");
             var responseCaffUploadMessage = await client.PostAsync("/cafffiles", content);
 
@@ -63,8 +65,6 @@ namespace CAFFAdapterClient.Test
             var responseContent = await responseMessage.Content.ReadAsStringAsync();
             var response = JsonConvert.DeserializeObject<LoginUserViewModel>(responseContent);
             var token = response.Token;
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var content = new StringContent(JsonConvert.SerializeObject(new CreateCaffFileDto
