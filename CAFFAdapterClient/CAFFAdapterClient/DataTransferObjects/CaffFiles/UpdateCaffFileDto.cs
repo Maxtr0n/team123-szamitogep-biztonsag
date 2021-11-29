@@ -2,5 +2,6 @@
 {
     public class UpdateCaffFileDto
     {
+        public string Description { get; set; }
     }
 }

@@ -59,3 +59,10 @@
     box-shadow: inset 0 0 3px black;
     border-radius: 10px;
 }
+
+.com_con .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

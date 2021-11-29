@@ -43,7 +43,8 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: 15px;
 }
 
@@ -60,14 +61,11 @@
     box-shadow: inset 0 0 2px black;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: flex-start;
 }
 
-.gif_container .description .edit_button {
-    position: absolute;
-    right: 10px;
-    top: 10px;
+.gif_container .description .edit_button {    
     opacity: 0.5;
 }
 

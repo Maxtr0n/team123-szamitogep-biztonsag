@@ -10,5 +10,6 @@ namespace CAFFAdapterClient.Services
         Task<GetUserInfoViewModel> GetUserInfoAsync(int id);
         Task EditUserAsync(int userId, JsonPatchDocument<EditUserDto> editUserDto);
         Task ChangePasswordAsync(int userId, ChangePasswordDto changePasswordDto);
+        Task DeleteComment(int commentId);        
     }
 }

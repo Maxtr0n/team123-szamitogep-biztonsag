@@ -43,6 +43,7 @@ import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-p
 import { DeleteUserDialogComponent } from './dialogs/delete-user-dialog/delete-user-dialog.component';
 import { LoadingComponent } from './loading/loading/loading.component';
 import { EditCaffDescriptionDialogComponent } from './dialogs/edit-caff-description-dialog/edit-caff-description-dialog.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -103,6 +104,7 @@ import { EditCaffDescriptionDialogComponent } from './dialogs/edit-caff-descript
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptorService, multi: true },
+        DatePipe
     ],
     bootstrap: [AppComponent],
     entryComponents: [ChangePasswordDialogComponent,

@@ -12,7 +12,7 @@ namespace CAFFAdapterClient.Controllers
 
         public DataseedController(IDataSeedService dataseedService)
         {
-            _dataseedService = dataseedService;
+            _dataseedService = dataseedService;            
         }
 
         [HttpPost]
@@ -20,6 +20,6 @@ namespace CAFFAdapterClient.Controllers
         {
             await _dataseedService.SeedAsync();
             return Ok();
-        }
+        }        
     }
 }

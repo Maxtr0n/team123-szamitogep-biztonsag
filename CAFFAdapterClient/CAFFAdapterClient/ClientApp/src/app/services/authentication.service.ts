@@ -3,6 +3,8 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { LoginRequest } from '../entities/login/LoginRequest';
 import { RegisterRequestData } from '../entities/register/RegisterRequestData';
 import { EndPoint } from './endpoints';
+import { SessionData } from './sessionData';
+import jwt_decode  from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +33,15 @@ export class AuthenticationService {
     return this.http.post(EndPoint.LOGIN_URL, loginRequest).toPromise();
   }
 
+  getUserIdFromToken() {
+    var tokenInfo = {
+      userid: ""
+    };
+    var token = sessionStorage.getItem(SessionData.TOKEN);
+    tokenInfo = jwt_decode(token);
+    return tokenInfo.userid;
+  }
+
   userLoggedin() {
     this.userLoggedIn.emit(true);
   } 
@@ -39,3 +50,4 @@ export class AuthenticationService {
     this.adminLoggedIn.emit(true);
   }  
 }
+

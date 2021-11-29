@@ -141,6 +141,7 @@ namespace CAFFAdapterClient.Services
             var caff = new CaffFile()
             {
                 File = dto.File,
+                Description = dto.Description,
                 Preview = preview,
                 UserId = _userProvider.GetUserId(),
                 Metadata = json,
@@ -205,6 +206,8 @@ namespace CAFFAdapterClient.Services
             var caff = await _dbContext.CaffFiles.FirstOrDefaultAsync(x => x.Id == id)
                 ?? throw new DataNotFoundException();
 
+            caff.Description = dto.Description;
+
             _dbContext.CaffFiles.Update(caff);
 
             await _dbContext.SaveChangesAsync();
@@ -267,7 +270,7 @@ namespace CAFFAdapterClient.Services
             if (byUserId)
             {
                 caffFiles = _dbContext.CaffFiles
-                .Where(x => x.UserId == _userProvider.GetUserId())
+                .Where(x => x.UserId == _userProvider.GetUserId())                
                 .OrderByDescending(x => x.CreatedAt)
                 .ToList();
             } else
@@ -281,8 +284,11 @@ namespace CAFFAdapterClient.Services
 
             foreach (var caffFile in caffFiles)
             {
+                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == caffFile.UserId);
+
                 var newGifViewModel = new GifViewModel();
                 newGifViewModel.Id = caffFile.Id;
+                newGifViewModel.Username = user.FirstName + " " + user.LastName;
                 newGifViewModel.Description = caffFile.Description;
                 newGifViewModel.Base64Encode = "data:image/gif;base64," + Convert.ToBase64String(caffFile.Preview);
                 items.Add(newGifViewModel);
@@ -298,9 +304,9 @@ namespace CAFFAdapterClient.Services
         public async Task<TableViewModel<CommentByGifViewModel>> getCommentsByGifId(int gifId)
         {
             var comments = _dbContext.Comments
-                .Where(x => x.CaffId == gifId)
+                .Where(x => x.CaffId == gifId && x.IsDeleted == false)
                 .Include(x => x.User)
-                .OrderByDescending(x => x.CreatedAt)
+                .OrderBy(x => x.CreatedAt)
                 .ToList();
 
             Console.WriteLine("COUNT: " + comments.Count());
@@ -334,8 +340,7 @@ namespace CAFFAdapterClient.Services
                 Description = createCaffSeedDto.Description
             };
 
-            _dbContext.CaffFiles.Add(caff);
-
+            await _dbContext.CaffFiles.AddAsync(caff);
             await _dbContext.SaveChangesAsync();
 
             return caff.Id;
@@ -346,7 +351,7 @@ namespace CAFFAdapterClient.Services
             var caff = await _dbContext.CaffFiles.FirstOrDefaultAsync(x => x.Id == commentSeedDto.CaffId)
                 ?? throw new DataNotFoundException();
 
-            _dbContext.Comments.Add(new Comment()
+            await _dbContext.Comments.AddAsync(new Comment()
             {
                 CreatedAt = DateTime.UtcNow,
                 UserId = commentSeedDto.UserId,

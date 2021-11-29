@@ -9,6 +9,8 @@ import { CommentService } from 'src/app/services/comment.service';
 import { UserService } from 'src/app/services/user.service';
 import { LoadingComponent } from 'src/app/loading/loading/loading.component';
 import { GetGifResponse } from 'src/app/entities/gif/GetGifResponse';
+import { CaffFileService } from 'src/app/services/caff-file.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-caff-files',
@@ -25,7 +27,9 @@ export class CaffFilesComponent implements OnInit {
   constructor(private userService: UserService,
     private commentService: CommentService,
     private dialog: MatDialog,
-    private toast: ToastrService) { }
+    private toast: ToastrService,
+    private caffService: CaffFileService,
+    private datePipe: DatePipe) { }
 
   ngOnInit() {
     // this.userService.getGifs().then(response => {
@@ -48,12 +52,34 @@ export class CaffFilesComponent implements OnInit {
     )
   }
 
-  downloadCaffFile() {
-    this.showDownloadInfo();
+  downloadCaffFile(caffId: number) {
+    //this.showDownloadInfo();
+    this.caffService.downloadCaff(caffId).then(
+      (response: Blob) => {
+        console.log(response);
+        this.downloadFile(response, caffId);
+      },
+      error => {
+
+      }
+    );
   }
 
   showDownloadInfo() {
     this.toast.info('Download has been started.', 'Info');
+  }
+
+  downloadFile(data: Blob, caffId: number) {
+    console.log('ITTEN');
+    const blob = data;
+    const url = window.URL.createObjectURL(blob);    
+    var anchor = document.createElement("a");
+    var now = new Date();
+    var date = this.datePipe.transform(now, 'yyyyMMddhhmm_' + caffId);
+    anchor.download = date + '.caff';
+    anchor.href = url;
+    anchor.click();
+    URL.revokeObjectURL(url);
   }
 
   async seeComments(gifId: number) {
@@ -72,6 +98,7 @@ export class CaffFilesComponent implements OnInit {
         console.log(response);
         var dialogData = new CommentsDialogData();
         dialogData.comments = response.items;
+        dialogData.caffId = gifId;
         dialogData.newComment = '';
         dialogConfig.data = dialogData; 
       },

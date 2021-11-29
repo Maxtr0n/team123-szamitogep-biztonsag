@@ -97,5 +97,21 @@ namespace CAFFAdapterClient.Services
 
             return user;
         }
+
+        public async Task DeleteComment(int commentId)
+        {
+            var comment = await _dbContext.Comments.FirstOrDefaultAsync(x => x.Id == commentId);
+
+            if (comment.UserId != this._userProvider.GetUserId())
+            {
+                throw new BusinessLogicException("Az adott komment nem törölhetõ!");
+            }
+
+            comment.IsDeleted = true;
+
+            _dbContext.Comments.Update(comment);
+
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

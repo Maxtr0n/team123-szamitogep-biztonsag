@@ -1,15 +1,31 @@
 <h2 mat-dialog-title>Upload CAFF file</h2>
 <div mat-dialog-content class="form_container">
-    <input type="file" (change)="fileUpload($event.target.files)" accept=".caff"/>
-    <button mat-button color="primary" style="margin-top: 20px;" (click)="preViewCaffFile()" [disabled]="!this.data.caffFile">Preview</button>
+  <ng-container *ngIf="!uploadStarted">
+    <input type="file" (change)="fileUpload($event.target.files)" accept=".caff" />
+    <button mat-button color="primary" style="margin-top: 20px;" (click)="preViewCaffFile()"
+      [disabled]="!this.data.caffFile">Preview</button>
     <div class="preview_container">
-        <img src="assets/default-img.png" width="100%" *ngIf="!this.preViewWasClicked">
-        <div class="spinner_container" *ngIf="this.preViewWasClicked">
-          <mat-spinner></mat-spinner>
-        </div>        
+      <img src="assets/default-img.png" width="100%" *ngIf="!this.preViewWasClicked">
+      <div class="spinner_container" *ngIf="showLoading">
+        <mat-spinner strokeWidth="5"></mat-spinner>
+      </div>
+      <img [src]="preview" width="100%" *ngIf="success">
     </div>
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea matInput [disabled]="!success" [(ngModel)]="description" placeholder="Leave a description"
+        rows="4"></textarea>
+    </mat-form-field>
+  </ng-container>
+  <ng-container *ngIf="uploadStarted">
+    <div class="spinner_container" style="margin: 10px 0 10px 0;">
+      <mat-spinner strokeWidth="5"></mat-spinner>
+    </div>
+  </ng-container>
 </div>
 <div mat-dialog-actions class="button_container">
-  <button mat-raised-button color="secondary" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="data" [disabled]="!this.preViewWasClicked || this.inProgress">Upload</button>
+  <ng-container *ngIf="!uploadStarted">
+    <button mat-raised-button color="secondary" (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+    <button mat-raised-button color="primary" (click)="uploadFile()" [disabled]="!success">Upload</button>
+  </ng-container>
 </div>

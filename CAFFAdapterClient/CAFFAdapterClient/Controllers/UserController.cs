@@ -45,5 +45,12 @@ namespace CAFFAdapterClient.Controllers
             await _userService.ChangePasswordAsync(userId, changePasswordDto);
             return Ok();
         }
+
+        [HttpDelete("deleteComment/{commentId}")]
+        public async Task<IActionResult> DeleteComment(int commentId)
+        {
+            await _userService.DeleteComment(commentId);
+            return Ok();
+        }
     }
 }

@@ -7,7 +7,7 @@ import { UploadImageComponent } from 'src/app/dialogs/upload-image/upload-image.
 import { ChangePasswordDialogData } from 'src/app/entities/ChangePasswordDialogData';
 import { CommentData } from 'src/app/entities/CommentData';
 import { CommentsDialogData } from 'src/app/entities/CommentsDialogData';
-import { DeleteCaffDialogData } from 'src/app/entities/DeleteCaffDialogData';
+import { DeleteDialogData, EntityType } from 'src/app/entities/DeleteCaffDialogData';
 import { GifResponse } from 'src/app/entities/GifResponse';
 import { UploadImageDialogData } from 'src/app/entities/UploadImageDialogData';
 import { CommentService } from 'src/app/services/comment.service';
@@ -24,6 +24,7 @@ import { EditDescriptionDialogData } from 'src/app/entities/dialogData/EditDescr
 import { EditCaffDescriptionDialogComponent } from 'src/app/dialogs/edit-caff-description-dialog/edit-caff-description-dialog.component';
 import { CssSelector } from '@angular/compiler';
 import { GetGifResponse } from 'src/app/entities/gif/GetGifResponse';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-userprofile',
@@ -37,12 +38,14 @@ export class UserprofileComponent implements OnInit {
   lastname: string = '';
   email:string = '';  
   gifs: GifResponse[] = [];
-  gifContainer: GetGifResponse[];
+  gifContainer: GetGifResponse[] = [];
 
   constructor(private dialog: MatDialog, 
     private userService: UserService, 
     private commentService: CommentService,
-    private toast: ToastrService) { }
+    private caffService: CaffFileService,
+    private toast: ToastrService,
+    private datePipe: DatePipe) { }
 
   ngOnInit() {   
 
@@ -65,13 +68,17 @@ export class UserprofileComponent implements OnInit {
 
     this.userService.getGifsByUser().then(
       response => {
-        this.gifContainer = response.items;
+        if (response.count == 0) {
+          this.gifContainer = [];
+        } else {
+          this.gifContainer = response.items;
+        }        
         this.isLoading = false;
       },
       error => {
 
       }
-    )
+    );
 
     this.loadUserInfo();
   }
@@ -146,7 +153,7 @@ export class UserprofileComponent implements OnInit {
     });
   }
 
-  editDescription(gif: GifResponse) {  
+  editDescription(gif: GetGifResponse) {  
     const dialogConfig = this.setEditDescriptionDialogConfigs(gif);
     const dialogRef = this.dialog.open(
       EditCaffDescriptionDialogComponent,
@@ -155,6 +162,27 @@ export class UserprofileComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: EditDescriptionDialogData) => {
       if (data) {
         console.log(data.description);
+        this.caffService.editDescription(gif.id, data.description).then(
+          response => {
+            this.isLoading = true;
+            this.userService.getGifsByUser().then(
+              response => {
+                if (response.count == 0) {
+                  this.gifContainer = [];
+                } else {
+                  this.gifContainer = response.items;
+                }        
+                this.isLoading = false;
+              },
+              error => {
+        
+              }
+            );
+          },
+          error => {
+
+          }
+        )
       }      
     });
   }
@@ -165,22 +193,82 @@ export class UserprofileComponent implements OnInit {
       UploadImageComponent,
       dialogConfig
     );
+
+    dialogRef.afterClosed().subscribe((data: String) => {
+      if (data == 'Success.') {
+        this.isLoading = true;
+        this.userService.getGifsByUser().then(
+          response => {
+            if (response.count == 0) {
+              this.gifContainer = [];
+            } else {
+              this.gifContainer = response.items;
+            }        
+            this.isLoading = false;
+          },
+          error => {
+    
+          }
+        )
+      }
+    });
   }
 
-  deleteCaffFile() {
-    const dialogConfig = this.setDeleteCaffDialogConfigs();
+  deleteCaffFile(gifId: number) {
+    const dialogConfig = this.setDeleteCaffDialogConfigs(gifId);
     const dialogRef = this.dialog.open(
       DeleteCaffDialogComponent,
       dialogConfig
     );
+
+    dialogRef.afterClosed().subscribe((data: string) => {
+      if (data == 'Success.') {
+        this.isLoading = true;
+        this.userService.getGifsByUser().then(
+          response => {
+            if (response.count == 0) {
+              this.gifContainer = [];
+            } else {
+              this.gifContainer = response.items;
+            }        
+            this.isLoading = false;
+          },
+          error => {
+    
+          }
+        )
+      }
+    });
   }
 
-  downloadCaffFile() {
-    this.showDownloadInfo();
+  downloadCaffFile(caffId: number) {
+    //this.showDownloadInfo();
+    this.caffService.downloadCaff(caffId).then(
+      (response: Blob) => {
+        console.log(response);
+        this.downloadFile(response, caffId);
+      },
+      error => {
+
+      }
+    );
   }
 
   showDownloadInfo() {
     this.toast.info('Download has been started.', 'Info');
+  }
+
+  downloadFile(data: Blob, caffId: number) {
+    console.log('ITTEN');
+    const blob = data;
+    const url = window.URL.createObjectURL(blob);    
+    var anchor = document.createElement("a");
+    var now = new Date();
+    var date = this.datePipe.transform(now, 'yyyyMMddhhmm_' + caffId);
+    anchor.download = date + '.caff';
+    anchor.href = url;
+    anchor.click();
+    URL.revokeObjectURL(url);
   }
 
   showSuccess(message: string) {
@@ -199,7 +287,7 @@ export class UserprofileComponent implements OnInit {
     );
   }
 
-  setEditDescriptionDialogConfigs(gif: GifResponse) {
+  setEditDescriptionDialogConfigs(gif: GetGifResponse) {
     const dialogConfig = this.setCommonConfig('550px');
     var dialogData = new EditDescriptionDialogData();
     dialogData.description = gif.description;
@@ -234,11 +322,12 @@ export class UserprofileComponent implements OnInit {
     return dialogConfig;
   }
 
-  setDeleteCaffDialogConfigs() {
+  setDeleteCaffDialogConfigs(gifId: number) {
     const dialogConfig = this.setCommonConfig('450px');
-    var dialogData = new DeleteCaffDialogData();
-    dialogConfig.data = dialogData;
-    
+    var dialogData = new DeleteDialogData();
+    dialogData.entityId = gifId;
+    dialogData.entityType = EntityType.CAFF;
+    dialogConfig.data = dialogData;    
     return dialogConfig;
   }
 
@@ -259,6 +348,7 @@ export class UserprofileComponent implements OnInit {
         console.log(response);
         var dialogData = new CommentsDialogData();
         dialogData.comments = response.items;
+        dialogData.caffId = gifId;
         dialogData.newComment = '';
         dialogConfig.data = dialogData; 
       },
