@@ -80,7 +80,7 @@ namespace CAFFAdapterClient.Test
             var responseCaffGetContent = await responseCaffGetMessage.Content.ReadAsStringAsync();
             var caffFiles = JsonConvert.DeserializeObject<TableViewModel<CaffFileRowViewModel>>(responseCaffGetContent);
 
-            Assert.Equal(1, caffFiles.Count);
+            Assert.Equal(0, caffFiles.Count);
         }
     }
 }
