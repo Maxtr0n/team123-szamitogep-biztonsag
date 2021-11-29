@@ -41,6 +41,13 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\Data\Migrations\" />
+    <Folder Include="Parser\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Parser\caffparser.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

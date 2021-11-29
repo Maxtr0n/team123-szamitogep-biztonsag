@@ -11,8 +11,11 @@ using CAFFAdapterClient.ViewModels.GifFiles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CAFFAdapterClient.Services
@@ -58,6 +61,8 @@ namespace CAFFAdapterClient.Services
             return new CaffFileViewModel
             {
                 Description = caff.Description,
+                CreatedAt = caff.CreatedAt,
+                Metadata = caff.Metadata,
                 Comments = caff.Comments.Select(x => new CommentViewModel
                 {
                     Id = x.Id,
@@ -89,15 +94,57 @@ namespace CAFFAdapterClient.Services
 
         public async Task<int> CreateAsync(CreateCaffFileDto dto)
         {
-            // TODO: preview betöltés, itt kellene ráhívni a parserra
-            var preview = new byte[0];
-            preview = new System.Net.WebClient().DownloadData("https://c.tenor.com/eFPFHSN4rJ8AAAAd/example.gif");
+            var caffName = Guid.NewGuid();
+            var inputPath = $"input-caff-files/{caffName}.caff";
+            var outputPath = $"processed-caff-files/{caffName}";
+
+            if (!Directory.Exists("input-caff-files"))
+            {
+                Directory.CreateDirectory("input-caff-files");
+            }
+            if (!Directory.Exists(outputPath))
+            {
+                Directory.CreateDirectory(outputPath);
+            }
+
+            await File.WriteAllBytesAsync(inputPath, dto.File);
+
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = $@"{Directory.GetCurrentDirectory()}\Parser\caffparser.exe";
+                process.StartInfo.Arguments = $"--if {inputPath} --of {outputPath}/{caffName}";
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+
+                var output = new StringBuilder();
+                var error = new StringBuilder();
+                process.OutputDataReceived += (sender, data) => output.Append("\n" + data.Data);
+                process.ErrorDataReceived += (sender, data) => error.Append("\n" + data.Data);
+
+                var startStatus = process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                await process.WaitForExitAsync();
+
+                if (!output.ToString().Contains("Parsing ended successfully."))
+                {
+                    throw new BusinessLogicException("Nem sikerült a CAFF fájl feltöltése!");
+                }
+            }
+
+            // var preview = new System.Net.WebClient().DownloadData("https://c.tenor.com/eFPFHSN4rJ8AAAAd/example.gif");
+            var preview = await File.ReadAllBytesAsync($"{outputPath}/{caffName}.gif");
+            var json = await File.ReadAllTextAsync($"{outputPath}/{caffName}.json");
 
             var caff = new CaffFile()
             {
                 File = dto.File,
                 Preview = preview,
-                UserId = _userProvider.GetUserId()
+                UserId = _userProvider.GetUserId(),
+                Metadata = json,
+                CreatedAt = DateTime.UtcNow
             };
 
             _dbContext.CaffFiles.Add(caff);
@@ -105,6 +152,52 @@ namespace CAFFAdapterClient.Services
             await _dbContext.SaveChangesAsync();
 
             return caff.Id;
+        }
+
+        public async Task<byte[]> PreviewAsync(CreateCaffFileDto dto)
+        {
+            var caffName = Guid.NewGuid();
+            var inputPath = $"input-caff-files/{caffName}.caff";
+            var outputPath = $"processed-caff-files/{caffName}";
+
+            if (!Directory.Exists("input-caff-files"))
+            {
+                Directory.CreateDirectory("input-caff-files");
+            }
+            if (!Directory.Exists(outputPath))
+            {
+                Directory.CreateDirectory(outputPath);
+            }
+
+            await File.WriteAllBytesAsync(inputPath, dto.File);
+
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = $@"{Directory.GetCurrentDirectory()}\Parser\caffparser.exe";
+                process.StartInfo.Arguments = $"--if {inputPath} --of {outputPath}/{caffName}";
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+
+                var output = new StringBuilder();
+                var error = new StringBuilder();
+                process.OutputDataReceived += (sender, data) => output.Append("\n" + data.Data);
+                process.ErrorDataReceived += (sender, data) => error.Append("\n" + data.Data);
+
+                var startStatus = process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                await process.WaitForExitAsync();
+
+                if (!output.ToString().Contains("Parsing ended successfully."))
+                {
+                    throw new BusinessLogicException("Nem sikerült a CAFF fájl feltöltése!");
+                }
+            }
+
+            // var preview = new System.Net.WebClient().DownloadData("https://c.tenor.com/eFPFHSN4rJ8AAAAd/example.gif");
+            return await File.ReadAllBytesAsync($"{outputPath}/{caffName}.gif");
         }
 
         public async Task UpdateAsync(int id, UpdateCaffFileDto dto)

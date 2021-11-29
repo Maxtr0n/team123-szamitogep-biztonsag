@@ -25,4 +25,14 @@
     <ProjectReference Include="..\CAFFAdapterClient\CAFFAdapterClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Inputs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Inputs\1.caff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

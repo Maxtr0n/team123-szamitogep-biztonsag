@@ -10,6 +10,8 @@ namespace CAFFAdapterClient.Domain
         public int? UserId { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string Metadata { get; set; }
+
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

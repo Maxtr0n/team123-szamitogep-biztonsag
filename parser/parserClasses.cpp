@@ -82,12 +82,17 @@ void CaffCredits::read(ifstream &is) {
     is.read(reinterpret_cast<char *>(&minute), 1);
 
     is.read(reinterpret_cast<char *>(&lenghtOfCreator), 8);
-    if (lenghtOfCreator > 0) {
-        vector<char> buffer(lenghtOfCreator);
-        is.read(&buffer.front(), lenghtOfCreator);
-        creator = std::string(buffer.begin(), buffer.end());
-    } else {
-        creator = "";
+
+    try {
+        if (lenghtOfCreator > 0) {
+            vector<char> buffer(lenghtOfCreator);
+            is.read(&buffer.front(), lenghtOfCreator);
+            creator = std::string(buffer.begin(), buffer.end());
+        } else {
+            creator = "";
+        }
+    } catch (exception const &e) {
+        throw (CaffFormatErrorException("Couldn't create creator string."));
     }
 }
 

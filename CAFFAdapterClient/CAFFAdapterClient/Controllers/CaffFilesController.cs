@@ -143,6 +143,13 @@ namespace CAFFAdapterClient.Controllers
             return Ok();
         }
 
+        [HttpPost("preview")]
+        public async Task<IActionResult> PreviewAsync(CreateCaffFileDto dto)
+        {
+            var result = await _caffFilesServices.PreviewAsync(dto);
+            return result.ToFile("image/gif");
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, UpdateCaffFileDto dto)
         {
