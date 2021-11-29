@@ -83,6 +83,7 @@ namespace CAFFAdapterClient.Services.Implementations
             var caff1File = getCaff("1.caff");
             var gif1File = getGif("testingv1.gif");
             var gifWeb = new System.Net.WebClient().DownloadData("https://c.tenor.com/eFPFHSN4rJ8AAAAd/example.gif");
+            var json = getJson();
 
             List<int> userIds = getUserIds(users);
 
@@ -113,6 +114,7 @@ namespace CAFFAdapterClient.Services.Implementations
                 {
                     caff.Gif = gifWeb;
                 }
+                caff.Json = json;
                 await _caffFilesServices.createCaffForSeed(caff);                                
             }
         }
@@ -214,6 +216,42 @@ namespace CAFFAdapterClient.Services.Implementations
             var gif = gifFolder + "\\" + fileName;
 
             return File.ReadAllBytes(gif);
+        }
+
+        private string getJson()
+        {
+            return "{" +
+                "\"creation_date\":{" +
+                    "\"day\":2," +
+                    "\"hour\":14," +
+                    "\"minute\":50," +
+                    "\"month\":7," +
+                    "\"year\":2020" +
+                "}," +
+                "\"creator\":\"Test Creator\"," +
+                "\"frames\":[" +
+                    "{" +
+                        "\"caption\":\"Beautiful scenery\"," +
+                        "\"counter\":0," +
+                        "\"tags\":[" +
+                            "\"landscape\"," +
+                            "\"sunset\"," +
+                            "\"mountains\"" +
+                        "]" +
+                    "}," +
+                    "{" +
+                        "\"caption\":\"Beautiful scenery\"," +
+                        "\"counter\":1," +
+                        "\"tags\":[" +
+                            "\"landscape\"," +
+                            "\"sunset\"," +
+                            "\"mountains\"" +
+                        "]" +
+                    "}" +
+                "]," +
+                "\"height\":667," +
+                "\"width\":1000" +
+            "}";
         }
     }
 }

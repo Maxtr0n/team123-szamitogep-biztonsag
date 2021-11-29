@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
     sessionStorage.setItem(SessionData.TOKEN, jwtToken);
     sessionStorage.setItem(SessionData.USER_ID, this.authService.getUserIdFromToken());
     this.authService.userLoggedin();
-    this.router.navigate(['user/home']);
+    this.router.navigate(['user/caff']);
   }
 
   adminLogin() {

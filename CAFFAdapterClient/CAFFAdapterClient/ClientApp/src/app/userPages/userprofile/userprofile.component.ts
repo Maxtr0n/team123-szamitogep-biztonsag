@@ -23,8 +23,9 @@ import { UserProfileResponse } from 'src/app/entities/UserProfileResponse';
 import { EditDescriptionDialogData } from 'src/app/entities/dialogData/EditDescriptionDialogData';
 import { EditCaffDescriptionDialogComponent } from 'src/app/dialogs/edit-caff-description-dialog/edit-caff-description-dialog.component';
 import { CssSelector } from '@angular/compiler';
-import { GetGifResponse } from 'src/app/entities/gif/GetGifResponse';
+import { CaffMetadata, GetGifResponse } from 'src/app/entities/gif/GetGifResponse';
 import { DatePipe } from '@angular/common';
+import { CaffMetadataDialogComponent } from 'src/app/dialogs/caff-metadata-dialog/caff-metadata-dialog.component';
 
 @Component({
   selector: 'app-userprofile',
@@ -185,6 +186,21 @@ export class UserprofileComponent implements OnInit {
         )
       }      
     });
+  }
+
+  seeMetadata(json: string) {
+    var metadata = JSON.parse(json) as CaffMetadata;
+    const dialogConfig = this.seeMetadataDialogConfigs(metadata);
+    const dialogRef = this.dialog.open(
+      CaffMetadataDialogComponent,
+      dialogConfig
+    );
+  }
+
+  seeMetadataDialogConfigs(metadata: CaffMetadata) {
+    const dialogConfig = this.setCommonConfig('700px'); 
+    dialogConfig.data = metadata;
+    return dialogConfig;
   }
 
   uploadCaffFile() {

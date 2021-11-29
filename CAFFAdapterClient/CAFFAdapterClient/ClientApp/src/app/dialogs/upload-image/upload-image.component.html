@@ -5,7 +5,7 @@
     <button mat-button color="primary" style="margin-top: 20px;" (click)="preViewCaffFile()"
       [disabled]="!this.data.caffFile">Preview</button>
     <div class="preview_container">
-      <img src="assets/default-img.png" width="100%" *ngIf="!this.preViewWasClicked">
+      <img src="assets/default-img.png" width="100%" *ngIf="!success && !showLoading">
       <div class="spinner_container" *ngIf="showLoading">
         <mat-spinner strokeWidth="5"></mat-spinner>
       </div>

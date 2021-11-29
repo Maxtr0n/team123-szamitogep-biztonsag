@@ -62,7 +62,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 10px;
 }
 
 .gif_container .description .edit_button {    
@@ -76,6 +77,9 @@
 .gif_container .description .details {
     text-align: justify;
     margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .content {    

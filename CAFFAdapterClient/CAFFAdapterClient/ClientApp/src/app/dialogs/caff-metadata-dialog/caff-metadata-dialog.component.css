@@ -1,0 +1,8 @@
+.button_container {
+    display: flex;    
+    margin-bottom: 1px;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}

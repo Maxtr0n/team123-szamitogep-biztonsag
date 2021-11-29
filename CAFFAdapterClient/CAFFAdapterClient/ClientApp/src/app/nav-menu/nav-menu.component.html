@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <a class="navbar-brand" [routerLink]="['/']">CAFFAdapterClient</a>
+            <a class="navbar-brand" [routerLink]="['/']">CAFF Browser</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
                 aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
                 <span class="navbar-toggler-icon"></span>
@@ -23,10 +23,7 @@
                         </li>
                     </ng-container>
 
-                    <ng-container *ngIf="isUserLoggedIn">
-                        <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
-                            <a class="nav-link text-dark" [routerLink]="['user/home']">Home</a>
-                        </li>
+                    <ng-container *ngIf="isUserLoggedIn">                        
                         <li class="nav-item" [routerLinkActive]="['link-active']" style="margin-left: 20px">
                             <a class="nav-link text-dark" [routerLink]="['user/caff']">Caff Images</a>
                         </li>

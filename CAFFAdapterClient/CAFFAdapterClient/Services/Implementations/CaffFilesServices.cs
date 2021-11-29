@@ -291,6 +291,7 @@ namespace CAFFAdapterClient.Services
                 newGifViewModel.Username = user.FirstName + " " + user.LastName;
                 newGifViewModel.Description = caffFile.Description;
                 newGifViewModel.Base64Encode = "data:image/gif;base64," + Convert.ToBase64String(caffFile.Preview);
+                newGifViewModel.Metadata = caffFile.Metadata;
                 items.Add(newGifViewModel);
             }
 
@@ -337,7 +338,8 @@ namespace CAFFAdapterClient.Services
                 File = createCaffSeedDto.Caff,
                 Preview = createCaffSeedDto.Gif,
                 UserId = createCaffSeedDto.UserId,
-                Description = createCaffSeedDto.Description
+                Description = createCaffSeedDto.Description,
+                Metadata = createCaffSeedDto.Json
             };
 
             await _dbContext.CaffFiles.AddAsync(caff);

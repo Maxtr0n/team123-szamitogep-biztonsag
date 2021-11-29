@@ -1,14 +1,28 @@
 <div class="main_container">
     <app-loading [isLoading]="isLoading"></app-loading>
-    <div class="gif">
-        <ng-container *ngFor="let gif of gifContainer">
+
+    <div class="search_container">
+        <div class="search" *ngIf="!loading && gifContainer && gifContainer.length > 0">
+            <mat-form-field class="search_text" appearance="outline">
+                <mat-label>Search by username or description</mat-label>
+                <input matInput type="text" [(ngModel)]="value" (input)="filterList($event.target.value)">
+                <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="resetList()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+        </div>
+    </div>
+    
+    <div class="gif">        
+        <ng-container *ngFor="let gif of filteredGifContainer">
             <div class="gif_container">
                 <div class="description">
                     <div class="user">
                         <strong>{{gif.username}}</strong>
+                        <button mat-mini-fab color="secondary" (click)="seeMetadata(gif.metadata)"><mat-icon>info</mat-icon></button>
                     </div>
                     <div class="detailes">
-                        <i>{{gif.description}}</i>
+                        <i>{{gif.description}}</i>                        
                     </div>                    
                 </div>  
                 <div class="gif_main">

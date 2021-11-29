@@ -6,5 +6,6 @@ namespace CAFFAdapterClient.ViewModels.GifFiles
        public string Username { get; set; }
        public string Description { get; set; }
        public string Base64Encode { get; set; }
+       public string Metadata { get; set; }
     }
 }
