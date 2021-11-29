@@ -82,7 +82,7 @@ namespace CAFFAdapterClient.Services
 
             if (_userProvider.GetUserRole() != Domain.Enums.UserRoles.Admin && caff.UserId != _userProvider.GetUserId())
             {
-                throw new BusinessLogicException("Az adott CAFF fájl nem törölhető!");
+                throw new BusinessLogicException("Can not remove CAFF file!");
             }
 
             caff.IsDeleted = true;
@@ -130,7 +130,7 @@ namespace CAFFAdapterClient.Services
 
                 if (!output.ToString().Contains("Parsing ended successfully."))
                 {
-                    throw new BusinessLogicException("Nem sikerült a CAFF fájl feltöltése!");
+                    throw new BusinessLogicException("Can not parse the CAFF file!");
                 }
             }
 
@@ -192,7 +192,7 @@ namespace CAFFAdapterClient.Services
 
                 if (!output.ToString().Contains("Parsing ended successfully."))
                 {
-                    throw new BusinessLogicException("Nem sikerült a CAFF fájl feltöltése!");
+                    throw new BusinessLogicException("Can not parse the CAFF file!");
                 }
             }
 
@@ -251,7 +251,7 @@ namespace CAFFAdapterClient.Services
 
             if (_userProvider.GetUserRole() != Domain.Enums.UserRoles.Admin && comment.UserId != _userProvider.GetUserId())
             {
-                throw new BusinessLogicException("Az adott komment nem törölhető!");
+                throw new BusinessLogicException("Can not remove the comment!");
             }
 
             comment.IsDeleted = true;
