@@ -193,6 +193,25 @@ export class UserprofileComponent implements OnInit {
       UploadImageComponent,
       dialogConfig
     );
+
+    dialogRef.afterClosed().subscribe((data: String) => {
+      if (data == 'Success.') {
+        this.isLoading = true;
+        this.userService.getGifsByUser().then(
+          response => {
+            if (response.count == 0) {
+              this.gifContainer = [];
+            } else {
+              this.gifContainer = response.items;
+            }        
+            this.isLoading = false;
+          },
+          error => {
+    
+          }
+        )
+      }
+    });
   }
 
   deleteCaffFile(gifId: number) {

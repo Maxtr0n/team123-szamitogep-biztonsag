@@ -141,6 +141,7 @@ namespace CAFFAdapterClient.Services
             var caff = new CaffFile()
             {
                 File = dto.File,
+                Description = dto.Description,
                 Preview = preview,
                 UserId = _userProvider.GetUserId(),
                 Metadata = json,

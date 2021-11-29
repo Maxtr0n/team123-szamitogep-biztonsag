@@ -11,11 +11,44 @@ export class CaffFileService {
 
   constructor(private http: HttpClient) { }
 
-  previewCaff(file: File) {
-    var fData: FormData = new FormData();
-    fData.append("content", file);    
-    console.log(fData.get("content"));
+  async previewCaff(file: File) {       
+    var source = await this.convertToByArray(file);    
+
+    var tmp = source as string;
+    var img = tmp.substring(tmp.indexOf(",") + 1);
+        
+    var requestBody = {
+      file: img
+    };
+    
+    return this.http.post(EndPoint.BASE_URL_2 + '/CaffFiles/preview', requestBody, { responseType: 'blob' }).toPromise();
   }
+
+  async uploadCaff(file: File, description: string) {
+    var source = await this.convertToByArray(file);    
+
+    var tmp = source as string;
+    var img = tmp.substring(tmp.indexOf(",") + 1);
+        
+    var requestBody = {
+      description: description,
+      file: img
+    };
+    
+    return this.http.post(EndPoint.BASE_URL_2 + '/CaffFiles', requestBody).toPromise();
+  }
+
+  async convertToByArray(file: File) {
+    return new Promise((resolve, reject) => {
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event: any) => {
+        var data = reader.result;
+        resolve(data);
+      };
+      //reader.readAsBinaryString(excelFile);
+    });
+  }  
 
   deleteCaff(gifId: number) {
     return this.http.delete(EndPoint.BASE_URL_2 + '/CaffFiles/' + gifId).toPromise();
