@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>Metadata</h1>
+<div mat-dialog-content>    
+    <table mat-table [dataSource]="array" class="mat-elevation-z8" style="width: 100%; margin: 10px 10px 20px 0">
+
+        <ng-container matColumnDef="key">            
+            <td mat-cell *matCellDef="let element"> <strong>{{element.key}}</strong> </td>            
+        </ng-container>
+
+        <ng-container matColumnDef="value">           
+            <td mat-cell *matCellDef="let element"> {{element.value}} </td>            
+        </ng-container>
+       
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>   
+
+    <div>
+        <strong>Frames: </strong>        
+        <table mat-table [dataSource]="data.frames" *ngIf="data.frames && data.frames.length > 0" class="mat-elevation-z8" style="width: 100%; margin: 10px 10px 20px 0">
+
+            <ng-container matColumnDef="counter">
+                <th mat-header-cell *matHeaderCellDef> Counter </th>
+                <td mat-cell *matCellDef="let element"> {{element.counter}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="caption">
+                <th mat-header-cell *matHeaderCellDef> Caption </th>
+                <td mat-cell *matCellDef="let element"> {{element.caption}} </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="tags">
+                <th mat-header-cell *matHeaderCellDef> Tags </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngFor="let tag of element.tags; let i = index" [attr.data-index]="i">
+                        <ng-container *ngIf="i != 0">, {{tag}}</ng-container>
+                        <ng-container *ngIf="i == 0">{{tag}}</ng-container>
+                    </ng-container>                    
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsFrames"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsFrames;"></tr>
+        </table>
+    </div>
+</div>
+<div mat-dialog-actions class="button_container">
+    <button mat-raised-button color="primary" (click)="onNoClick()" cdkFocusInitial>Close</button>
+</div>

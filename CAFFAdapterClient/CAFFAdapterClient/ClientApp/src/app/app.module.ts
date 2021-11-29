@@ -19,6 +19,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
 
 import { ToastrModule } from 'ngx-toastr';
 
@@ -44,6 +45,8 @@ import { DeleteUserDialogComponent } from './dialogs/delete-user-dialog/delete-u
 import { LoadingComponent } from './loading/loading/loading.component';
 import { EditCaffDescriptionDialogComponent } from './dialogs/edit-caff-description-dialog/edit-caff-description-dialog.component';
 import { DatePipe } from '@angular/common';
+import { CaffMetadataDialogComponent } from './dialogs/caff-metadata-dialog/caff-metadata-dialog.component';
+import { CaffMetadata } from './entities/gif/GetGifResponse';
 
 @NgModule({
     declarations: [
@@ -66,7 +69,7 @@ import { DatePipe } from '@angular/common';
         EditProfileDialogComponent,
         DeleteUserDialogComponent,
         LoadingComponent,        
-        EditCaffDescriptionDialogComponent
+        EditCaffDescriptionDialogComponent, CaffMetadataDialogComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -99,8 +102,9 @@ import { DatePipe } from '@angular/common';
         MatIconModule,
         MatSnackBarModule,
         MatDialogModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        MatTableModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptorService, multi: true },
@@ -114,7 +118,8 @@ import { DatePipe } from '@angular/common';
         DownloadCaffDialogComponent,
         EditProfileDialogComponent,
         DeleteUserDialogComponent,
-        EditCaffDescriptionDialogComponent
+        EditCaffDescriptionDialogComponent,
+        CaffMetadataDialogComponent        
     ],
 })
 export class AppModule { }
