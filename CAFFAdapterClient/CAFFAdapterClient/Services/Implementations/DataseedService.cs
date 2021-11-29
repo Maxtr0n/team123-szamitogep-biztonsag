@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CAFFAdapterClient.Services.Implementations
@@ -30,6 +31,33 @@ namespace CAFFAdapterClient.Services.Implementations
 
         public async Task SeedAsync()
         {
+            var dbUsers = _dbContext.Users.Where(x => x.Role == UserRoles.Standard).ToList();
+            var dbAdmins = _dbContext.Users.Where(x => x.Role == UserRoles.Admin).ToList();
+
+            if (dbUsers.Count == 0)
+            {
+                await createUsers();
+                dbUsers = _dbContext.Users.Where(x => x.Role == UserRoles.Standard).ToList();
+            }                        
+
+            var dbCaffs = _dbContext.CaffFiles.Select(x => x).ToList();
+
+            if (dbCaffs.Count == 0)
+            {
+                await createCaffs(dbUsers);
+                dbCaffs = _dbContext.CaffFiles.Select(x => x).ToList();
+            }
+
+            var dbComments = _dbContext.Comments.Select(x => x).ToList();
+
+            if (dbComments.Count == 0)
+            {
+                await createComments(dbUsers, dbCaffs);
+            }            
+        }        
+
+        private async Task createUsers()
+        {
             var users = new List<User>();
             var admins = new List<User>();
 
@@ -38,20 +66,25 @@ namespace CAFFAdapterClient.Services.Implementations
                 var user = createUser(i);
                 Console.WriteLine(user.Id);
                 await generateUser(user);
-                users.Add(user);                
+                users.Add(user);
             }
 
             for (int i = 0; i < 10; i++)
-            {                
+            {
                 var admin = createAdmin(i);
                 Console.WriteLine(admin.Id);
                 await generateAdmin(admin);
                 admins.Add(admin);
             }
+        }
 
+        private async Task createCaffs(List<User> users)
+        {
             var caff1File = getCaff("1.caff");
             var gif1File = getGif("testingv1.gif");
-            List<int> caffIds = new List<int>();
+            var gifWeb = new System.Net.WebClient().DownloadData("https://c.tenor.com/eFPFHSN4rJ8AAAAd/example.gif");
+
+            List<int> userIds = getUserIds(users);
 
             for (int i = 0; i < 10; i++)
             {
@@ -61,11 +94,15 @@ namespace CAFFAdapterClient.Services.Implementations
 
                 if (i < 5)
                 {
-                    caff.UserId = users[0].Id;
+                    caff.UserId = users.First().Id;
                 }
                 else
                 {
-                    caff.UserId = users[i].Id;
+                    var random = new Random();
+                    var idx = random.Next(0, userIds.Count);
+                    var id = userIds[idx];
+
+                    caff.UserId = id;
                 }
 
                 if (i % 2 == 0)
@@ -74,39 +111,45 @@ namespace CAFFAdapterClient.Services.Implementations
                 }
                 else
                 {
-                    caff.Gif = new System.Net.WebClient().DownloadData("https://c.tenor.com/eFPFHSN4rJ8AAAAd/example.gif");
+                    caff.Gif = gifWeb;
                 }
-                var caffId = await _caffFilesServices.createCaffForSeed(caff);
-                caffIds.Add(caffId);
+                await _caffFilesServices.createCaffForSeed(caff);                                
+            }
+        }
 
+        private async Task createComments(List<User> users, List<CaffFile> caffs)
+        {
+            List<int> userIds = getUserIds(users);
+
+            foreach (var caff in caffs)
+            {
                 var random = new Random();
                 var limit = random.Next(0, 10);
+
                 for (int j = 0; j < limit; j++)
                 {
+                    var randomUser = new Random();
+                    var idx = randomUser.Next(0, userIds.Count);
+                    var id = userIds[idx];
+
                     var commentSeed = new CommentSeedDto();
-                    commentSeed.CaffId = caffId;
+                    commentSeed.CaffId = caff.Id;
                     commentSeed.Message = Faker.Lorem.Sentence();
-                    commentSeed.UserId = users[j].Id;
+                    commentSeed.UserId = id;
 
                     await _caffFilesServices.addCommentForSeed(commentSeed);
                 }
             }
+        }
 
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    var caffId = await _caffFilesServices.CreateAsync(new DataTransferObjects.CaffFiles.CreateCaffFileDto()
-            //    {
-            //        File = caff1File                    
-            //    });
-
-            //    for (int j = 0; j < 3; j++)
-            //    {
-            //        await _caffFilesServices.AddCommentAsync(caffId, new DataTransferObjects.CaffFiles.AddComment()
-            //        {
-            //            Message = $"#{j} example comment"
-            //        });
-            //    }
-            //}
+        private List<int> getUserIds(List<User> users)
+        {
+            List<int> userIds = new List<int>();
+            foreach (var user in users)
+            {
+                userIds.Add(user.Id);
+            }
+            return userIds;
         }
 
         private User createUser(int idx)

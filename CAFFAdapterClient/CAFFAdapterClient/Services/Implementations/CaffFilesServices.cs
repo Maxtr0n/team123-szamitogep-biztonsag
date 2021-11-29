@@ -284,7 +284,7 @@ namespace CAFFAdapterClient.Services
 
             foreach (var caffFile in caffFiles)
             {
-                var user = _dbContext.Users.FirstOrDefault(x => x.Id == caffFile.UserId);
+                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == caffFile.UserId);
 
                 var newGifViewModel = new GifViewModel();
                 newGifViewModel.Id = caffFile.Id;
@@ -340,8 +340,7 @@ namespace CAFFAdapterClient.Services
                 Description = createCaffSeedDto.Description
             };
 
-            _dbContext.CaffFiles.Add(caff);
-
+            await _dbContext.CaffFiles.AddAsync(caff);
             await _dbContext.SaveChangesAsync();
 
             return caff.Id;
@@ -352,7 +351,7 @@ namespace CAFFAdapterClient.Services
             var caff = await _dbContext.CaffFiles.FirstOrDefaultAsync(x => x.Id == commentSeedDto.CaffId)
                 ?? throw new DataNotFoundException();
 
-            _dbContext.Comments.Add(new Comment()
+            await _dbContext.Comments.AddAsync(new Comment()
             {
                 CreatedAt = DateTime.UtcNow,
                 UserId = commentSeedDto.UserId,
