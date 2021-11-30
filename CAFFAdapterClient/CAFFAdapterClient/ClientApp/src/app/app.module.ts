@@ -19,6 +19,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
 
 import { ToastrModule } from 'ngx-toastr';
 
@@ -44,6 +45,8 @@ import { LoadingComponent } from './loading/loading/loading.component';
 import { EditCaffDescriptionDialogComponent } from './dialogs/edit-caff-description-dialog/edit-caff-description-dialog.component';
 import { DatePipe } from '@angular/common';
 import { AddAdminDialogComponent } from './dialogs/add-admin-dialog/add-admin-dialog.component';
+import { CaffMetadataDialogComponent } from './dialogs/caff-metadata-dialog/caff-metadata-dialog.component';
+import { CaffMetadata } from './entities/gif/GetGifResponse';
 
 @NgModule({
     declarations: [
@@ -65,7 +68,9 @@ import { AddAdminDialogComponent } from './dialogs/add-admin-dialog/add-admin-di
         EditProfileDialogComponent,
         DeleteUserDialogComponent,
         LoadingComponent,
-        EditCaffDescriptionDialogComponent, AddAdminDialogComponent
+        EditCaffDescriptionDialogComponent,
+        AddAdminDialogComponent,
+        CaffMetadataDialogComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -98,7 +103,8 @@ import { AddAdminDialogComponent } from './dialogs/add-admin-dialog/add-admin-di
         MatSnackBarModule,
         MatDialogModule,
         MatProgressSpinnerModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatTableModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptorService, multi: true },
@@ -112,7 +118,8 @@ import { AddAdminDialogComponent } from './dialogs/add-admin-dialog/add-admin-di
         DownloadCaffDialogComponent,
         EditProfileDialogComponent,
         DeleteUserDialogComponent,
-        EditCaffDescriptionDialogComponent
+        EditCaffDescriptionDialogComponent,
+        CaffMetadataDialogComponent
     ],
 })
 export class AppModule { }

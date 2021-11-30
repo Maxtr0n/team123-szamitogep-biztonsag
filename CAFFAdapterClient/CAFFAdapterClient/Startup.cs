@@ -7,6 +7,7 @@ using CAFFAdapterClient.Infrastructure;
 using CAFFAdapterClient.Infrastructure.Constants;
 using CAFFAdapterClient.Providers;
 using CAFFAdapterClient.Services;
+using CAFFAdapterClient.Services.Implementations;
 using CAFFAdapterClient.Services.MappingProfiles;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -106,10 +107,10 @@ namespace CAFFAdapterClient
             services.AddScoped<IUserProvider, UserProvider>();
 
             services.AddInfrastructure();
-            services.AddInMemoryDb();
+            // services.AddInMemoryDb();
             // dotnet ef migrations add Initial -o Infrastructure/Data/Migrations
             // dotnet ef database update
-            // services.AddSqlServer(Configuration.GetConnectionString("Model"));
+            services.AddSqlServer(Configuration.GetConnectionString("Model"));
             services.AddBusinessLogic();
 
             var config = new MapperConfiguration(c => {
@@ -170,7 +171,7 @@ namespace CAFFAdapterClient
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
-            });            
+            });           
         }
     }
 }

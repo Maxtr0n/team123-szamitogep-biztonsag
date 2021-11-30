@@ -6,5 +6,6 @@ namespace CAFFAdapterClient.DataTransferObjects.CaffFiles
         public byte[] Caff { get; set; }
         public byte[] Gif { get; set; }
         public string Description { get; set; }
+        public string Json { get; set; }
     }
 }

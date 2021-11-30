@@ -8,9 +8,10 @@ import { GifResponse } from 'src/app/entities/GifResponse';
 import { CommentService } from 'src/app/services/comment.service';
 import { UserService } from 'src/app/services/user.service';
 import { LoadingComponent } from 'src/app/loading/loading/loading.component';
-import { GetGifResponse } from 'src/app/entities/gif/GetGifResponse';
+import { CaffMetadata, GetGifResponse } from 'src/app/entities/gif/GetGifResponse';
 import { CaffFileService } from 'src/app/services/caff-file.service';
 import { DatePipe } from '@angular/common';
+import { CaffMetadataDialogComponent } from 'src/app/dialogs/caff-metadata-dialog/caff-metadata-dialog.component';
 
 @Component({
     selector: 'app-caff-files',
@@ -23,6 +24,8 @@ export class CaffFilesComponent implements OnInit {
     base64gif = '';
     gifs: GifResponse[] = [];
     gifContainer: GetGifResponse[];
+    filteredGifContainer: GetGifResponse[];
+    value = '';
 
     constructor(private userService: UserService,
         private commentService: CommentService,
@@ -32,24 +35,46 @@ export class CaffFilesComponent implements OnInit {
         private datePipe: DatePipe) { }
 
     ngOnInit() {
-        // this.userService.getGifs().then(response => {
-        //   var gif = response as GifResponse;      
-        //   this.base64gif = gif.file;
-        //   for (var i = 0; i < 6; i++) {
-        //     this.gifs.push(gif);
-        //   }
-        //   this.isLoading = false;
-        // });
-
         this.userService.getAllGifs().then(
             response => {
                 this.gifContainer = response.items;
+                this.filteredGifContainer = response.items;
                 this.isLoading = false;
             },
             error => {
 
             }
         )
+    }
+
+    filterList(text: string) {
+        if (!text || text.length == 0) {
+            this.filteredGifContainer = this.gifContainer;
+        }
+
+        this.filteredGifContainer = [];
+        for (var i = 0; i < this.gifContainer.length; i++) {
+            var element = this.gifContainer[i];
+            var username = element.username.toLowerCase();
+            var description = element.description.toLowerCase();
+            if (username.includes(text.toLowerCase()) || description.includes(text.toLowerCase())) {
+                this.filteredGifContainer.push(element);
+            }
+        }
+    }
+
+    resetList() {
+        this.value = '';
+        this.filteredGifContainer = this.gifContainer;
+    }
+
+    seeMetadata(json: string) {
+        var metadata = JSON.parse(json) as CaffMetadata;
+        const dialogConfig = this.seeMetadataDialogConfigs(metadata);
+        const dialogRef = this.dialog.open(
+            CaffMetadataDialogComponent,
+            dialogConfig
+        );
     }
 
     downloadCaffFile(caffId: number) {
@@ -62,6 +87,10 @@ export class CaffFilesComponent implements OnInit {
 
             }
         );
+    }
+
+    showDownloadInfo() {
+        this.toast.info('Download has been started.', 'Info');
     }
 
     downloadFile(data: Blob, caffId: number) {
@@ -102,6 +131,12 @@ export class CaffFilesComponent implements OnInit {
             }
         )
 
+        return dialogConfig;
+    }
+
+    seeMetadataDialogConfigs(metadata: CaffMetadata) {
+        const dialogConfig = this.setCommonConfig('700px');
+        dialogConfig.data = metadata;
         return dialogConfig;
     }
 

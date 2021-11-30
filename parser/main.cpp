@@ -90,29 +90,33 @@ int main(int argc, char* argv[]) {
     /** ---------------- OPEN & READ END ---------------- */
 
     /** ---------------- GENERATE GIF ---------------- */
+    uint32_t width, height;
+    try {
+        width = caff.animation.at(0).ciff.header.width;
+        height = caff.animation.at(0).ciff.header.height;
 
-    uint32_t width = caff.animation.at(0).ciff.header.width;
-    uint32_t height = caff.animation.at(0).ciff.header.height;
+        auto fileName = fileOut + string(".gif");
+        GifWriter g;
+        GifBegin(&g, fileName.c_str(), width, height, 1);
+        for (auto &f: caff.animation) {
+            vector<uint8_t> pixelToGif{};
+            size_t n = 0;
 
-    auto fileName = fileOut + string(".gif");
-    GifWriter g;
-    GifBegin(&g, fileName.c_str(), width, height, 1);
-    for (auto &f : caff.animation) {
-        vector<uint8_t> pixelToGif{};
-        size_t n = 0;
-
-        for (auto &p: f.ciff.content.pixels) {
-            pixelToGif.push_back(p);
-            n++;
-            if (n == 3) {
-                pixelToGif.push_back(255);
-                n = 0;
+            for (auto &p: f.ciff.content.pixels) {
+                pixelToGif.push_back(p);
+                n++;
+                if (n == 3) {
+                    pixelToGif.push_back(255);
+                    n = 0;
+                }
             }
+            GifWriteFrame(&g, pixelToGif.data(), width, height, f.duration / 10);
         }
-        GifWriteFrame(&g, pixelToGif.data(), width, height, f.duration/10);
+        GifEnd(&g);
+    } catch (exception &e) {
+        cout << "Error while generating gif." << endl;
+        return 0;
     }
-    GifEnd(&g);
-
     /** ---------------- GENERATE GIF END ---------------- */
 
     /** ---------------- JSON ---------------- */
