@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CAFFAdapterClient.Infrastructure.Data.migrations
+namespace CAFFAdapterClient.Infrastructure.Data.Migrations
 {
     public partial class Initial : Migration
     {
@@ -19,6 +19,8 @@ namespace CAFFAdapterClient.Infrastructure.Data.migrations
                     Preview = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Metadata = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

@@ -52,7 +52,7 @@ namespace CAFFAdapterClient.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteByIdAsync(int id)
         {
             await _accountService.DeleteByIdAsync(id);
