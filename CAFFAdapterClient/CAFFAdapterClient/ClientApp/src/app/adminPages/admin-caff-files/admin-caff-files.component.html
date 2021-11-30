@@ -15,20 +15,23 @@
                     <img [src]="gif.base64Encode" width="100%" />
                 </div>
                 <div class="content">
-                    <div class="icon_container">
-                        <button mat-icon-button (click)="deleteCaffFile(gif.id)">
-                            <mat-icon class="icon-display">delete</mat-icon>
-                        </button>
-                    </div>
                     <div class="button_container">
                         <button mat-button color="primary" (click)="seeComments(gif.id)">Comments</button>
                     </div>
-                    <div class="icon_container">
-                        <button mat-icon-button (click)="downloadCaffFile(gif.id)">
-                            <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">
-                                file_download</mat-icon>
-                        </button>
+                    <div class="buttons">
+                        <div class="icon_container">
+                            <button mat-icon-button (click)="deleteCaffFile(gif.id)">
+                                <mat-icon class="icon-display">delete</mat-icon>
+                            </button>
+                        </div>
+                        <div class="icon_container">
+                            <button mat-icon-button (click)="downloadCaffFile(gif.id)">
+                                <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">
+                                    file_download</mat-icon>
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </ng-container>
