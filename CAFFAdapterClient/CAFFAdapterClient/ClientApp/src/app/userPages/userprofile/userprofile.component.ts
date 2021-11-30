@@ -188,6 +188,21 @@ export class UserprofileComponent implements OnInit {
         });
     }
 
+    seeMetadata(json: string) {
+        var metadata = JSON.parse(json) as CaffMetadata;
+        const dialogConfig = this.seeMetadataDialogConfigs(metadata);
+        const dialogRef = this.dialog.open(
+            CaffMetadataDialogComponent,
+            dialogConfig
+        );
+    }
+
+    seeMetadataDialogConfigs(metadata: CaffMetadata) {
+        const dialogConfig = this.setCommonConfig('700px');
+        dialogConfig.data = metadata;
+        return dialogConfig;
+    }
+
     uploadCaffFile() {
         const dialogConfig = this.setUploadImageDialogConfigs();
         const dialogRef = this.dialog.open(
