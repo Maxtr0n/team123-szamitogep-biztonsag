@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CAFFAdapterClient.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppModelDbContext))]
-    [Migration("20211130162636_Initial")]
+    [Migration("20211130190626_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

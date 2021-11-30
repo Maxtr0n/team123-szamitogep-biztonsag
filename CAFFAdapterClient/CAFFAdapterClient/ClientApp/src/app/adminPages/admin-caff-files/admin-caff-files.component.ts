@@ -2,12 +2,13 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
+import { CaffMetadataDialogComponent } from 'src/app/dialogs/caff-metadata-dialog/caff-metadata-dialog.component';
 import { CommentsDialogComponent } from 'src/app/dialogs/comments-dialog/comments-dialog.component';
 import { DeleteCaffDialogComponent } from 'src/app/dialogs/delete-caff-dialog/delete-caff-dialog.component';
 import { CommentData } from 'src/app/entities/CommentData';
 import { CommentsDialogData } from 'src/app/entities/CommentsDialogData';
 import { DeleteDialogData, EntityType } from 'src/app/entities/DeleteCaffDialogData';
-import { GetGifResponse } from 'src/app/entities/gif/GetGifResponse';
+import { CaffMetadata, GetGifResponse } from 'src/app/entities/gif/GetGifResponse';
 import { GifResponse } from 'src/app/entities/GifResponse';
 import { AdminService } from 'src/app/services/admin.service';
 import { CaffFileService } from 'src/app/services/caff-file.service';
@@ -24,6 +25,8 @@ export class AdminCaffFilesComponent implements OnInit {
     base64gif = '';
     gifs: GifResponse[] = [];
     gifContainer: GetGifResponse[];
+    filteredGifContainer: GetGifResponse[];
+    value = '';
 
     constructor(private dialog: MatDialog,
         private adminService: AdminService,
@@ -42,12 +45,43 @@ export class AdminCaffFilesComponent implements OnInit {
         this.adminService.getAllGifs().then(
             response => {
                 this.gifContainer = response.items;
+                this.filteredGifContainer = response.items;
                 this.isLoading = false;
             },
             error => {
 
             }
         )
+    }
+
+    filterList(text: string) {
+        if (!text || text.length == 0) {
+            this.filteredGifContainer = this.gifContainer;
+        }
+
+        this.filteredGifContainer = [];
+        for (var i = 0; i < this.gifContainer.length; i++) {
+            var element = this.gifContainer[i];
+            var username = element.username.toLowerCase();
+            var description = element.description.toLowerCase();
+            if (username.includes(text.toLowerCase()) || description.includes(text.toLowerCase())) {
+                this.filteredGifContainer.push(element);
+            }
+        }
+    }
+
+    resetList() {
+        this.value = '';
+        this.filteredGifContainer = this.gifContainer;
+    }
+
+    seeMetadata(json: string) {
+        var metadata = JSON.parse(json) as CaffMetadata;
+        const dialogConfig = this.seeMetadataDialogConfigs(metadata);
+        const dialogRef = this.dialog.open(
+            CaffMetadataDialogComponent,
+            dialogConfig
+        );
     }
 
     deleteCaffFile(gifId: number) {
@@ -127,6 +161,12 @@ export class AdminCaffFilesComponent implements OnInit {
             }
         )
 
+        return dialogConfig;
+    }
+
+    seeMetadataDialogConfigs(metadata: CaffMetadata) {
+        const dialogConfig = this.setCommonConfig('700px');
+        dialogConfig.data = metadata;
         return dialogConfig;
     }
 
