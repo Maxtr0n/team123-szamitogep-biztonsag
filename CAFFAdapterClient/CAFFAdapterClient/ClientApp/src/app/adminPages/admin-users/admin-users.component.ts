@@ -47,18 +47,18 @@ export class AdminUsersComponent implements OnInit {
             DeleteUserDialogComponent,
             dialogConfig
         );
-        dialogRef.afterClosed().subscribe(() => {
-
-            this.adminService.deleteAccount(userId).then(
-                success => {
-                    this.showSuccess('User deleted.');
-                    this.getData();
-                },
-                err => {
-                    var response = err as ReqisterResponseErrorData;
-                    this.showError(response.error);
-                });
-
+        dialogRef.afterClosed().subscribe((data: String) => {
+            if (data == 'Success.') {
+                this.adminService.deleteAccount(userId).then(
+                    success => {
+                        this.showSuccess('User deleted.');
+                        this.getData();
+                    },
+                    err => {
+                        var response = err as ReqisterResponseErrorData;
+                        this.showError(response.error);
+                    });
+            }
         });
     }
 
