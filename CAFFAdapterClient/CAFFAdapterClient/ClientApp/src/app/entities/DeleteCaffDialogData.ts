@@ -1,7 +1,8 @@
 export class DeleteDialogData {
     entityType: EntityType;
     entityId: number;
-    parentCaffId: number;    
+    parentCaffId: number;
+    isAdminDelete: boolean;
 }
 
 export enum EntityType {

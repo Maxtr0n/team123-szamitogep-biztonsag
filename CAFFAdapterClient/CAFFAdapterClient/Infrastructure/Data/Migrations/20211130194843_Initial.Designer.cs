@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CAFFAdapterClient.Infrastructure.Data.migrations
+namespace CAFFAdapterClient.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppModelDbContext))]
-    [Migration("20211127215147_Initial")]
+    [Migration("20211130194843_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace CAFFAdapterClient.Infrastructure.Data.migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -40,6 +43,9 @@ namespace CAFFAdapterClient.Infrastructure.Data.migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Metadata")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Preview")
                         .HasColumnType("varbinary(max)");

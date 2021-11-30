@@ -1,17 +1,28 @@
 <div class="main_container">
+    <div>
+        <button mat-button color="primary" (click)="addAdmin()">
+            <mat-icon style="margin-right: 5px;">add</mat-icon>Add Admin
+        </button>
+    </div>
     <ng-container *ngFor="let user of users">
 
         <div class="data_container">
             <div class="profile_data_container">
-                <p>Firstname: <strong>Joseph</strong></p>
-                <p>Lastname: <strong>McAllister</strong></p>
-                <p style="margin-bottom: 0;">Email: <strong>email@email.com</strong></p>
+                <p>Firstname: <strong>{{user.firstName}}</strong></p>
+                <p>Lastname: <strong>{{user.lastName}}</strong></p>
+                <p>Email: <strong>{{user.email}}</strong></p>
+                <ng-container *ngIf="user.role == 0">
+                    <p style="margin-bottom: 0;">Role: <strong>Admin</strong></p>
+                </ng-container>
+                <ng-container *ngIf="user.role == 1">
+                    <p style="margin-bottom: 0;">Role: <strong>Standard</strong></p>
+                </ng-container>
             </div>
             <div class="change_data_container">
-                <button mat-button color="primary" (click)="editProfile()">
+                <button mat-button color="primary" (click)="editProfile(user.id)">
                     <mat-icon style="margin-right: 5px;">edit</mat-icon>Edit profile
                 </button>
-                <button mat-button color="warn" (click)="deleteProfile()">
+                <button mat-button color="warn" (click)="deleteProfile(user.id)">
                     <mat-icon style=" margin-right: 5px;">delete</mat-icon>Delete profile
                 </button>
             </div>

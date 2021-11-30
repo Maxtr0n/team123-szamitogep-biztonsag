@@ -19,5 +19,9 @@ export class DeleteUserDialogComponent implements OnInit {
         this.dialogRef.close();
     }
 
+    deleteEntity() {
+        this.dialogRef.close("Success.");
+    }
+
 
 }

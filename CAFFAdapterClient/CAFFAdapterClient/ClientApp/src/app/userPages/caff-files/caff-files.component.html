@@ -2,44 +2,47 @@
     <app-loading [isLoading]="isLoading"></app-loading>
 
     <div class="search_container">
-        <div class="search" *ngIf="!loading && gifContainer && gifContainer.length > 0">
+        <div class="search" *ngIf="!isLoading && gifContainer && gifContainer.length > 0">
             <mat-form-field class="search_text" appearance="outline">
                 <mat-label>Search by username or description</mat-label>
                 <input matInput type="text" [(ngModel)]="value" (input)="filterList($event.target.value)">
                 <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="resetList()">
-                  <mat-icon>close</mat-icon>
+                    <mat-icon>close</mat-icon>
                 </button>
-              </mat-form-field>
+            </mat-form-field>
         </div>
     </div>
-    
-    <div class="gif">        
+
+    <div class="gif">
         <ng-container *ngFor="let gif of filteredGifContainer">
             <div class="gif_container">
                 <div class="description">
                     <div class="user">
                         <strong>{{gif.username}}</strong>
-                        <button mat-mini-fab color="secondary" (click)="seeMetadata(gif.metadata)"><mat-icon>info</mat-icon></button>
+                        <button mat-mini-fab color="secondary" (click)="seeMetadata(gif.metadata)">
+                            <mat-icon>info</mat-icon>
+                        </button>
                     </div>
                     <div class="detailes">
-                        <i>{{gif.description}}</i>                        
-                    </div>                    
-                </div>  
+                        <i>{{gif.description}}</i>
+                    </div>
+                </div>
                 <div class="gif_main">
-                    <img [src]="gif.base64Encode" width="100%"/>
-                </div>                              
+                    <img [src]="gif.base64Encode" width="100%" />
+                </div>
                 <div class="content">
                     <div class="button_container">
                         <button mat-button color="primary" (click)="seeComments(gif.id)">Comments</button>
                     </div>
-                    <div class="icon_container">                        
+                    <div class="icon_container">
                         <button mat-icon-button (click)="downloadCaffFile(gif.id)">
-                            <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">file_download</mat-icon>
-                        </button>                        
+                            <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">
+                                file_download</mat-icon>
+                        </button>
                     </div>
                 </div>
             </div>
-    
+
         </ng-container>
     </div>
 </div>

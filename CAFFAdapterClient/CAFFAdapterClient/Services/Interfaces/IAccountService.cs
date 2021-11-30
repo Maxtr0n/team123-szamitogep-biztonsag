@@ -15,5 +15,6 @@ namespace CAFFAdapterClient.Services
         Task EditUserAsync(int id, JsonPatchDocument<EditUserDto> editUserDto);
         Task DeleteByIdAsync(int id);
         Task<ActionResult<TableViewModel<UserRowViewModel>>> GetAsync();
+        Task RegisterAdminAsync(RegisterUserDto registerUserDto);
     }
 }
