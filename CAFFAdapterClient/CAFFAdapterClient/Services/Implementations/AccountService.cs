@@ -100,7 +100,24 @@ namespace CAFFAdapterClient.Services
             }
         }
 
-        public async Task<GetUserInfoViewModel> GetUserInfoAsync(int id)
+        public async Task RegisterAdminAsync(RegisterUserDto registerUserDto)
+        {
+          var identityResult = await _userManager.CreateAsync(new User()
+          {
+            FirstName = registerUserDto.FirstName,
+            LastName = registerUserDto.LastName,
+            Role = UserRoles.Admin,
+            Email = registerUserDto.Email,
+            UserName = Guid.NewGuid().ToString(),
+          }, registerUserDto.Password);
+
+          if (!identityResult.Succeeded)
+          {
+            throw new BusinessLogicException(string.Join(", ", identityResult.Errors.Select(i => i.Description)));
+          }
+        }
+
+    public async Task<GetUserInfoViewModel> GetUserInfoAsync(int id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
 
@@ -153,7 +170,10 @@ namespace CAFFAdapterClient.Services
                 {
                     Id = x.Id,
                     FirstName = x.FirstName,
-                    LastName = x.LastName
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    Role = x.Role,
+                    
                 })
                 .ToList();
 

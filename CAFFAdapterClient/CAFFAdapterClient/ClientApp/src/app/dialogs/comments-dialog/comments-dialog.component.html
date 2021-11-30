@@ -1,36 +1,46 @@
 <div class="title_container">
-  <div class="tit_con">
-    <h2 mat-dialog-title style="margin-bottom: 0;">
-      Comments
-    </h2>
-  </div>
-  <div class="close_container">
-    <button mat-icon-button (click)="onNoClick()"><mat-icon>close</mat-icon></button>
-  </div>
-</div>
-<div mat-dialog-content class="form_container">  
-
-  <ng-container *ngIf="this.data.comments.length == 0">
-    <p><i>No comments yet.</i></p>
-  </ng-container>
-
-  <ng-container *ngIf="this.data.comments.length > 0">
-    <div class="comment_container">
-      <ng-container *ngFor="let comment of this.data.comments">
-        <div class="com_con">          
-          <div class="content">
-            <strong>{{comment.username}}</strong><br/>
-            <button mat-icon-button *ngIf="comment.userId == userId" (click)="deleteComment(comment.commentId)"><mat-icon>delete</mat-icon></button>
-          </div>      
-          {{comment.comment}} 
-        </div>    
-      </ng-container>
+    <div class="tit_con">
+        <h2 mat-dialog-title style="margin-bottom: 0;">
+            Comments
+        </h2>
     </div>
-  </ng-container>
-  
-  <mat-form-field class="full-width" appearance="outline">
-    <mat-label>Leave a comment</mat-label>
-    <input matInput [(ngModel)]="this.data.newComment" (keydown.enter)="sendCommentByEnter()">
-    <button mat-icon-button matSuffix [disabled]="this.data.newComment.length == 0" (click)="sendComment()"><mat-icon>send</mat-icon></button>
-  </mat-form-field>
+    <div class="close_container">
+        <button mat-icon-button (click)="onNoClick()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
+<div mat-dialog-content class="form_container">
+
+    <ng-container *ngIf="this.data.comments.length == 0">
+        <p><i>No comments yet.</i></p>
+    </ng-container>
+
+    <ng-container *ngIf="this.data.comments.length > 0">
+        <div class="comment_container">
+            <ng-container *ngFor="let comment of this.data.comments">
+                <div class="com_con">
+                    <div class="content">
+                        <strong>{{comment.username}}</strong><br />
+                        <button mat-icon-button *ngIf="comment.userId == userId && !isAdminLoggedIn"
+                            (click)="deleteComment(comment.commentId)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button mat-icon-button *ngIf="isAdminLoggedIn" (click)="adminDeleteComment(comment.commentId)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                    {{comment.comment}}
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Leave a comment</mat-label>
+        <input matInput [(ngModel)]="this.data.newComment" (keydown.enter)="sendCommentByEnter()">
+        <button mat-icon-button matSuffix [disabled]="this.data.newComment.length == 0" (click)="sendComment()">
+            <mat-icon>send</mat-icon>
+        </button>
+    </mat-form-field>
 </div>

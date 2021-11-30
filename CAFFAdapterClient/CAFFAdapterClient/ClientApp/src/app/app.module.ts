@@ -26,7 +26,6 @@ import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
 import { HeaderInterceptorService } from './services/header-interceptor.service';
 import { UserHomeComponent } from './userPages/user-home/user-home.component';
-import { AdminHomeComponent } from './adminPages/admin-home/admin-home.component';
 import { AdminUsersComponent } from './adminPages/admin-users/admin-users.component';
 import { AdminCaffFilesComponent } from './adminPages/admin-caff-files/admin-caff-files.component';
 
@@ -44,6 +43,7 @@ import { DeleteUserDialogComponent } from './dialogs/delete-user-dialog/delete-u
 import { LoadingComponent } from './loading/loading/loading.component';
 import { EditCaffDescriptionDialogComponent } from './dialogs/edit-caff-description-dialog/edit-caff-description-dialog.component';
 import { DatePipe } from '@angular/common';
+import { AddAdminDialogComponent } from './dialogs/add-admin-dialog/add-admin-dialog.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +53,6 @@ import { DatePipe } from '@angular/common';
         RegistrationComponent,
         LoginComponent,
         UserHomeComponent,
-        AdminHomeComponent,
         AdminUsersComponent,
         AdminCaffFilesComponent,
         UserprofileComponent,
@@ -65,8 +64,8 @@ import { DatePipe } from '@angular/common';
         DownloadCaffDialogComponent,
         EditProfileDialogComponent,
         DeleteUserDialogComponent,
-        LoadingComponent,        
-        EditCaffDescriptionDialogComponent
+        LoadingComponent,
+        EditCaffDescriptionDialogComponent, AddAdminDialogComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -77,7 +76,6 @@ import { DatePipe } from '@angular/common';
             { path: 'signin', component: LoginComponent },
             { path: 'signup', component: RegistrationComponent },
 
-            { path: 'admin/home', component: AdminHomeComponent, canActivate: [AdminAuthGuard] },
             { path: 'admin/caff', component: AdminCaffFilesComponent, canActivate: [AdminAuthGuard] },
             { path: 'admin/users', component: AdminUsersComponent, canActivate: [AdminAuthGuard] },
 
@@ -99,8 +97,8 @@ import { DatePipe } from '@angular/common';
         MatIconModule,
         MatSnackBarModule,
         MatDialogModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule
+        MatProgressSpinnerModule,
+        MatTooltipModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptorService, multi: true },

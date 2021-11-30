@@ -7,89 +7,89 @@ import { Router } from '@angular/router';
 import { SessionData } from '../services/sessionData';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;  
-  adminLoginForm: FormGroup;  
+    loginForm: FormGroup;
+    adminLoginForm: FormGroup;
 
-  emailValue = '';
+    emailValue = '';
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private toast: ToastrService,
-    private authService: AuthenticationService,
-    private router: Router) { }
+    constructor(
+        private formBuilder: FormBuilder,
+        private toast: ToastrService,
+        private authService: AuthenticationService,
+        private router: Router) { }
 
-  ngOnInit() {
-    
-    this.loginForm = this.formBuilder.group({
-      email: [null, [Validators.required, Validators.email]],
-      password: [null, Validators.required],
-    });
+    ngOnInit() {
 
-    this.adminLoginForm = this.formBuilder.group({
-      email: [null, [Validators.required, Validators.email]],
-      password: [null, Validators.required],
-    });
-  }
+        this.loginForm = this.formBuilder.group({
+            email: [null, [Validators.required, Validators.email]],
+            password: [null, Validators.required],
+        });
 
-  userLogin() {
-    var email = this.loginForm.value.email;
-    var password = this.loginForm.value.password;
+        this.adminLoginForm = this.formBuilder.group({
+            email: [null, [Validators.required, Validators.email]],
+            password: [null, Validators.required],
+        });
+    }
 
-    this.authService.login(email, password).then(response => {      
-      var responseEntity = response as LoginResponse;
-      if (responseEntity.isSuccess == true && responseEntity.role == 1) {
-        this.handleSuccessUserLogin(responseEntity.token);        
-      } else {
-        this.showError('Invalid email or password.');
-      } 
-    });
-  }
+    userLogin() {
+        var email = this.loginForm.value.email;
+        var password = this.loginForm.value.password;
 
-  handleSuccessUserLogin(jwtToken: string) {
-    this.showSuccess();
-    sessionStorage.setItem(SessionData.USER_LOGGED_IN, 'true');
-    sessionStorage.setItem(SessionData.TOKEN, jwtToken);
-    sessionStorage.setItem(SessionData.USER_ID, this.authService.getUserIdFromToken());
-    this.authService.userLoggedin();
-    this.router.navigate(['user/home']);
-  }
+        this.authService.login(email, password).then(response => {
+            var responseEntity = response as LoginResponse;
+            if (responseEntity.isSuccess == true && responseEntity.role == 1) {
+                this.handleSuccessUserLogin(responseEntity.token);
+            } else {
+                this.showError('Invalid email or password.');
+            }
+        });
+    }
 
-  adminLogin() {
-    var email = this.adminLoginForm.value.email;
-    var password = this.adminLoginForm.value.password;
+    handleSuccessUserLogin(jwtToken: string) {
+        this.showSuccess();
+        sessionStorage.setItem(SessionData.USER_LOGGED_IN, 'true');
+        sessionStorage.setItem(SessionData.TOKEN, jwtToken);
+        sessionStorage.setItem(SessionData.USER_ID, this.authService.getUserIdFromToken());
+        this.authService.userLoggedin();
+        this.router.navigate(['user/home']);
+    }
 
-    this.authService.login(email, password).then(response => {
-      var responseEntity = response as LoginResponse;
-      if (responseEntity.isSuccess == true && responseEntity.role == 0) {
-        this.handleSuccessAdminLogin(responseEntity.token);        
-      } else {
-        this.showError('Invalid email or password.');
-      }
-    });
-  }
+    adminLogin() {
+        var email = this.adminLoginForm.value.email;
+        var password = this.adminLoginForm.value.password;
 
-  handleSuccessAdminLogin(jwtToken: string) {
-    this.showSuccess();
-    sessionStorage.setItem(SessionData.ADMIN_LOGGED_IN, 'true');
-    sessionStorage.setItem(SessionData.TOKEN, jwtToken);
-    this.authService.adminLoggedin();
-    this.router.navigateByUrl('admin/home');
-  }
+        this.authService.login(email, password).then(response => {
+            var responseEntity = response as LoginResponse;
+            if (responseEntity.isSuccess == true && responseEntity.role == 0) {
+                this.handleSuccessAdminLogin(responseEntity.token);
+            } else {
+                this.showError('Invalid email or password.');
+            }
+        });
+    }
 
-  showSuccess() {
-    this.toast.success('You have successfully logged in.', 'Success!', {
-      timeOut: 3000,      
-    });
-  }  
+    handleSuccessAdminLogin(jwtToken: string) {
+        this.showSuccess();
+        sessionStorage.setItem(SessionData.ADMIN_LOGGED_IN, 'true');
+        sessionStorage.setItem(SessionData.TOKEN, jwtToken);
+        this.authService.adminLoggedin();
+        this.router.navigateByUrl('admin/caff');
+    }
 
-  showError(message) {
-    this.toast.error(message, 'Login failed');
-  }
+    showSuccess() {
+        this.toast.success('You have successfully logged in.', 'Success!', {
+            timeOut: 3000,
+        });
+    }
+
+    showError(message) {
+        this.toast.error(message, 'Login failed');
+    }
 
 }

@@ -1,26 +1,36 @@
 <div class="main_container">
+    <app-loading [isLoading]="isLoading"></app-loading>
     <div class="gif">
-        <ng-container *ngFor="let gif of gifs">
-
+        <ng-container *ngFor="let gif of gifContainer">
             <div class="gif_container">
-                <img [src]="gif.file" alt="this slowpoke moves" width="360" />
+                <div class="description">
+                    <div class="user">
+                        <strong>{{gif.username}}</strong>
+                    </div>
+                    <div class="detailes">
+                        <i>{{gif.description}}</i>
+                    </div>
+                </div>
+                <div class="gif_main">
+                    <img [src]="gif.base64Encode" width="100%" />
+                </div>
                 <div class="content">
+                    <div class="icon_container">
+                        <button mat-icon-button (click)="deleteCaffFile(gif.id)">
+                            <mat-icon class="icon-display">delete</mat-icon>
+                        </button>
+                    </div>
                     <div class="button_container">
-                        <button mat-button color="primary" (click)="seeComments()">Comments</button>
+                        <button mat-button color="primary" (click)="seeComments(gif.id)">Comments</button>
                     </div>
                     <div class="icon_container">
-                        <button mat-icon-button (click)="deleteCaffFile()">
-                            <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">delete
-                            </mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="downloadCaffFile()">
+                        <button mat-icon-button (click)="downloadCaffFile(gif.id)">
                             <mat-icon aria-hidden="false" class="icon-display" aria-label="Example home icon">
                                 file_download</mat-icon>
                         </button>
                     </div>
                 </div>
             </div>
-
         </ng-container>
     </div>
 </div>

@@ -64,5 +64,14 @@ namespace CAFFAdapterClient.Controllers
         {
             return await _accountService.GetAsync();
         }
-    }
+
+        
+        [HttpPost("registerAdmin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserDto registerUserDto)
+        {
+          await _accountService.RegisterAdminAsync(registerUserDto);
+          return Ok();
+        }
+
+  }
 }
