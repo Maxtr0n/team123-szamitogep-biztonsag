@@ -54,66 +54,21 @@ namespace CAFFAdapterClient.Controllers
 
             return Ok();
         }
-
-        /* Kellene UI-ra:
-         * 1. User szinten getGifsByUser: példa Json (createdDate alapján rendezve (legutóbbi az első))
-         * [
-         *      {
-         *          gifId: "1",
-         *          gifDescription: "vmi leírás ide 1",
-         *          gifBase64: "data:image/gif;base64,..."
-         *      },
-         *      {
-         *          gifId: "2",
-         *          gifDescription: "vmi leírás ide 2",
-         *          gifBase64: "data:image/gif;base64,..."
-         *      },
-         *      ..
-         * ]
-         * 
-         * 2. Ugyan ez, csak nem kell user-re szűrni -> getAllGifs
-         * 
-         * 3. Get Comments By Gif Id:
-         * [
-         *      {
-         *          commentId: "1",
-         *          userId" "1",
-         *          username: "Joseph King",
-         *          comment: "Valami comment 1"
-         *      },
-         *      {
-         *          commentId: "2",
-         *          userId" "1",
-         *          username: "Joseph King",
-         *          comment: "Valami comment 2"
-         *      },
-         *      {
-         *          commentId: "3",
-         *          userId" "2",
-         *          username: "Davy Jones",
-         *          comment: "Valami comment 3"
-         *      },
-         *      ...
-         * ]
-         */
-
-        //1.
+        
         [HttpGet("/getGifsByUserId")]
         public async Task<ActionResult<TableViewModel<GifViewModel>>> getGifsByUserId()
         {
             var result = await _caffFilesServices.getGifs(true);
             return Ok(result);
         }
-
-        //2.
+        
         [HttpGet("/getAllGifs")]
         public async Task<ActionResult<TableViewModel<GifViewModel>>> getAllGifs()
         {
             var result = await _caffFilesServices.getGifs(false);
             return Ok(result);
         }
-
-        //3.
+        
         [HttpGet("getCommentsByGifId/{gifId}")]
         public async Task<ActionResult<TableViewModel<CommentByGifViewModel>>> getCommentsByGifId(int gifId)
         {

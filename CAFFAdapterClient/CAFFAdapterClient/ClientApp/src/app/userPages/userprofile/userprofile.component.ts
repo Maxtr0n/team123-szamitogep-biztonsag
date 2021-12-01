@@ -48,25 +48,7 @@ export class UserprofileComponent implements OnInit {
         private toast: ToastrService,
         private datePipe: DatePipe) { }
 
-    ngOnInit() {
-
-        // this.userService.getGifs().then(response => {
-        //   var gif = response as GifResponse;      
-        //   this.base64gif = gif.file;
-        //   for (var i = 0; i < 6; i++) {
-        //     this.gifs.push(gif);
-        //   }
-        //   this.isLoading = false;
-        // });
-
-        // this.userService.getGifVersion2().then((response: Blob) => {
-        //   console.log('VÁLASZ');
-        //   console.log(response);
-        //   console.log('BASE64:');   
-        //   this.createImageFromBlob(response);
-        //   this.isLoading = false;
-        // });
-
+    ngOnInit() {        
         this.userService.getGifsByUser().then(
             response => {
                 if (response.count == 0) {
@@ -77,7 +59,7 @@ export class UserprofileComponent implements OnInit {
                 this.isLoading = false;
             },
             error => {
-
+                this.toast.error('Please try again later.', 'Something went wrong.')
             }
         );
 
@@ -176,12 +158,12 @@ export class UserprofileComponent implements OnInit {
                                 this.isLoading = false;
                             },
                             error => {
-
+                                this.toast.error('Please try again later.', 'Something went wrong.')
                             }
                         );
                     },
                     error => {
-
+                        this.toast.error('Please try again later.', 'Something went wrong.')
                     }
                 )
             }
@@ -223,7 +205,7 @@ export class UserprofileComponent implements OnInit {
                         this.isLoading = false;
                     },
                     error => {
-
+                        this.toast.error('Please try again later.', 'Something went wrong.')
                     }
                 )
             }
@@ -250,7 +232,7 @@ export class UserprofileComponent implements OnInit {
                         this.isLoading = false;
                     },
                     error => {
-
+                        this.toast.error('Please try again later.', 'Something went wrong.')
                     }
                 )
             }
@@ -265,7 +247,7 @@ export class UserprofileComponent implements OnInit {
                 this.downloadFile(response, caffId);
             },
             error => {
-
+                this.toast.error('Please try again later.', 'Something went wrong.')
             }
         );
     }
@@ -348,17 +330,7 @@ export class UserprofileComponent implements OnInit {
     }
 
     async setSeeCommentsDialogConfigs(gifId: number) {
-        const dialogConfig = this.setCommonConfig('550px');
-
-        // await this.commentService.getCommentsForGif('1').then(response => {
-        //   var responseEntity = response as CommentData[];     
-        //   console.log(responseEntity); 
-        //   var dialogData = new CommentsDialogData();
-        //   dialogData.comments = responseEntity;
-        //   dialogData.newComment = '';
-        //   dialogConfig.data = dialogData;            
-        // });    
-
+        const dialogConfig = this.setCommonConfig('550px');            
         await this.commentService.getCommentsByGifId(gifId).then(
             response => {
                 console.log(response);
@@ -369,7 +341,7 @@ export class UserprofileComponent implements OnInit {
                 dialogConfig.data = dialogData;
             },
             error => {
-
+                this.toast.error('Please try again later.', 'Something went wrong.')
             }
         )
 
