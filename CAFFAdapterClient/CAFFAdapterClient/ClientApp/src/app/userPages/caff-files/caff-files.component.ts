@@ -42,7 +42,7 @@ export class CaffFilesComponent implements OnInit {
                 this.isLoading = false;
             },
             error => {
-
+                this.toast.error('Please try again later.', 'Something went wrong.')
             }
         )
     }
@@ -84,7 +84,7 @@ export class CaffFilesComponent implements OnInit {
                 this.downloadFile(response, caffId);
             },
             error => {
-
+                this.toast.error('Please try again later.', 'Something went wrong.')
             }
         );
     }
@@ -127,7 +127,7 @@ export class CaffFilesComponent implements OnInit {
                 dialogConfig.data = dialogData;
             },
             error => {
-
+                this.toast.error('Please try again later.', 'Something went wrong.')
             }
         )
 

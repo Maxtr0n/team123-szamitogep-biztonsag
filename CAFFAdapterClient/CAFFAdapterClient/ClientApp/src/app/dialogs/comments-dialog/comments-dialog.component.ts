@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Toast, ToastrService } from 'ngx-toastr';
 import { CommentsDialogData } from 'src/app/entities/CommentsDialogData';
 import { DeleteDialogData, EntityType } from 'src/app/entities/DeleteCaffDialogData';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -22,7 +23,8 @@ export class CommentsDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: CommentsDialogData,
         private dialog: MatDialog,
         private commentService: CommentService,
-        private authService: AuthenticationService) {
+        private authService: AuthenticationService,
+        private toast: ToastrService) {
         this.authService.adminLoggedIn.subscribe(res => this.changeToAdminComments(res));
         this.authService.userLoggedIn.subscribe(res => this.changeToUserComments(res));
     }
@@ -54,12 +56,12 @@ export class CommentsDialogComponent implements OnInit {
                         this.data.newComment = '';
                     },
                     error => {
-
+                        this.toast.error('Please try again later.', 'Something went wrong.')
                     }
                 )
             },
             error => {
-
+                this.toast.error('Please try again later.', 'Something went wrong.')
             }
         );
     }
@@ -86,7 +88,7 @@ export class CommentsDialogComponent implements OnInit {
                         this.data.newComment = '';
                     },
                     error => {
-
+                        this.toast.error('Please try again later.', 'Something went wrong.')
                     }
                 )
             }
@@ -109,7 +111,7 @@ export class CommentsDialogComponent implements OnInit {
                         this.data.newComment = '';
                     },
                     error => {
-
+                        this.toast.error('Please try again later.', 'Something went wrong.')
                     }
                 )
             }
