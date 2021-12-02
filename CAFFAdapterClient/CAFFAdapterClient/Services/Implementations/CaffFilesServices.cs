@@ -288,7 +288,7 @@ namespace CAFFAdapterClient.Services
 
                 var newGifViewModel = new GifViewModel();
                 newGifViewModel.Id = caffFile.Id;
-                newGifViewModel.Username = user.FirstName + " " + user.LastName;
+                newGifViewModel.Username = user?.FirstName + " " + user?.LastName;
                 newGifViewModel.Description = caffFile.Description;
                 newGifViewModel.Base64Encode = "data:image/gif;base64," + Convert.ToBase64String(caffFile.Preview);
                 newGifViewModel.Metadata = caffFile.Metadata;
